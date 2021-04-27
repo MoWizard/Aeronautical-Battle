@@ -1,2 +1,2 @@
 # TopDownBulletHell
- Bullet Hell sounds cooler :)
+A top down bullet hell made for a game dev course
