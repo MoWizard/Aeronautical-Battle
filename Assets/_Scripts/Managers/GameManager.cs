@@ -35,4 +35,9 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    public void NextState()
+    {
+        m_GameState = m_GameState++;
+    }
 }

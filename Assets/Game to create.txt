@@ -1,0 +1,30 @@
+Things to do:
+Use the lowpoly assets to create the player and the enemies
+Player starts on the ship and then flies off of it to start
+To end it flies off above the camera
+Bullets to shoot enemies while they shoot at you
+Need to collect fuel along the way as it decreases
+Can also collect boosts
+Need a nature scenery below the aircraft
+Create an explosion for the death of the aircraft
+Highscores are cool
+Obstacles like bridges are also cool
+
+https://learn.unity.com/tutorial/boundaries-hazards-and-enemies?uv=5.x&projectId=5c5148e1edbc2a001fd5bdfe#5c7f8528edbc2a002053b72f
+
+Start of game:
+Player Pos = Vector3(0,6.5,-28)
+Size of Cam = 43
+
+During game:
+Size of Cam = 20
+
+https://www.youtube.com/watch?v=ig-0oJgy7NI&ab_channel=SingleSaplingGames
+
+
+start couroutine x
+
+IEnumerator x
+yield return new WaitForSeconds(SpawnInterval);
+
+Instantiate(Object to Spawn, transform, true);

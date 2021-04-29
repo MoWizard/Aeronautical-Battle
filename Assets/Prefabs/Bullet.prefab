@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3273270681926168284}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,6 +61,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b71669d43af7b3f479e47c004c48150f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_GameManager: {fileID: 1925964112652296989, guid: b319038fa719d704fbbb8e72e484f4c4, type: 3}
+  bulletExplosion: {fileID: 1539816608655810074, guid: a4e857726339bf846bea7aa5cd1d326d, type: 3}
+  playerExplosion: {fileID: 1545263287284428218, guid: b9b9f43ad2fa4e048b0cd02eb976bf6d, type: 3}
+  casterDestroyed: 0
 --- !u!54 &8178740371071980133
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -5,8 +5,10 @@ using UnityEngine;
 public class DestroyOnContact : MonoBehaviour
 {
     public GameManager m_GameManager;
-    public GameObject explosion;
+    public GameObject bulletExplosion;
     public GameObject playerExplosion;
+
+    public bool casterDestroyed = false;
 
     void OnTriggerEnter(Collider other)
     {
@@ -14,13 +16,17 @@ public class DestroyOnContact : MonoBehaviour
         {
             return;
         }
-        Instantiate(explosion, transform.position, transform.rotation);
+        Instantiate(bulletExplosion, transform.position, transform.rotation);
         if (other.tag == "Player")
         {
             Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-            m_GameManager.State = GameManager.GameState.Playing;
+            m_GameManager.NextState();
         }
         Destroy(other.gameObject);
+        Destroy(gameObject);
+    }
+    void OnLeaveBoundary()
+    {
         Destroy(gameObject);
     }
 }
