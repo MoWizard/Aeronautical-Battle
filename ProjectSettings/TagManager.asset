@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Caster
   - Bullet
+  - Boundary
+  - Siege
+  - Super
   layers:
   - Default
   - TransparentFX

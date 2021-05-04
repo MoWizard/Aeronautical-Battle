@@ -5,31 +5,31 @@ using UnityEngine;
 public class EnemyShooting : MonoBehaviour
 {
     // Reference the enemy
-    public GameObject casterEnemy;
-    public GameObject player;
+    public GameObject enemy;
 
     // Reference the bullet prefab and where the bullets spawn
     public GameObject bullet;
     public Transform bulletSpawn;
 
+    // Find the player
+    private GameObject player;
+
     public float fireRate;
     private float nextFire;
 
-    private Vector3 m_LookPosition;
-
-    void Start()
+    private void Awake()
     {
-        //GameObject player = GameObject.FindWithTag("Player");
+        player = GameObject.Find("PlayerMesh");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(casterEnemy != null) //NEED TO WORK ON THIS
+        if(player.activeSelf == true && Time.time > nextFire)
         {
-            //m_LookPosition.z = player.transform.position.z - transform.position.z;
-            //transform.rotation.z = Mathf.SmoothDamp(transform.rotation.z, m_LookPosition.z, Time.deltaTime);
-            Debug.Log(player);
+            // Repeatedly fire bullets
+            nextFire = Time.time + fireRate;
+            Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
         }
     }
 }

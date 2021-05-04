@@ -8,7 +8,6 @@ public class RotateBlades : MonoBehaviour
     public GameObject mainPropeller;
     public GameObject sidePropeller;
     public GameObject casterEnemy;
-    private bool isAlive = true;
 
     // Start is called before the first frame update
     void Start()
@@ -16,21 +15,10 @@ public class RotateBlades : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Bullet")
-        {
-            isAlive = false;
-        }
-    }
-
-    // Update is called once per frame
+    // Rotates the blades every frame
     void Update()
     {
-        if(isAlive == true)
-        {
-            mainPropeller.transform.Rotate(0, 500 * Time.deltaTime, 0);
-            sidePropeller.transform.Rotate(250 * Time.deltaTime, 0, 0);
-        }
+        mainPropeller.transform.Rotate(0, 500 * Time.deltaTime, 0);
+        sidePropeller.transform.Rotate(250 * Time.deltaTime, 0, 0);
     }
 }

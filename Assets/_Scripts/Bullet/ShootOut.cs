@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShootOut : MonoBehaviour
 {
-    // Speed of thee bullet
+    // Speed of the bullet
     public float m_Speed;
 
    void Start()

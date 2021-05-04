@@ -8,7 +8,20 @@ Can also collect boosts
 Need a nature scenery below the aircraft
 Create an explosion for the death of the aircraft
 Highscores are cool
-Obstacles like bridges are also cool
+Add bullet particle effect (red>yellow)
+
+Fuel:
+ - Start with 100
+ - Decrease by 3 every 5 seconds
+
+
+Main Menu:
+  - Title
+  - Play
+  - Highscore
+  - Exit
+
+Create the Psuedocode
 
 https://learn.unity.com/tutorial/boundaries-hazards-and-enemies?uv=5.x&projectId=5c5148e1edbc2a001fd5bdfe#5c7f8528edbc2a002053b72f
 
