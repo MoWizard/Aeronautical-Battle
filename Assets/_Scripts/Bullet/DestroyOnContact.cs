@@ -4,60 +4,60 @@ using UnityEngine;
 
 public class DestroyOnContact : MonoBehaviour
 {
-    // Get the GameManager
-    public GameManager m_GameManager;
+    // Get the GameManager and Siege Health
+    GameManager m_GameManager;
+    SiegeHealth m_SiegeHealth;
 
     // Retrieve the particle effects
     public GameObject bulletExplosion;
-    public GameObject playerExplosion;
+    public GameObject explosion;
 
-    // Give the siege enemy HP
-    public int m_siegeHP = 0;
+    void Awake()
+    {
+        m_GameManager = FindObjectOfType<GameManager>();
+    }
+
+    private void Start()
+    {
+        Destroy(gameObject, 5);
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        // Has it gone out of bounds?
-        if (other.tag == "Boundary")
+        // Check each tag
+        switch (other.gameObject.tag)
         {
-            gameObject.SetActive(false);
-            return;
-        }
-
-        Instantiate(bulletExplosion, transform.position, transform.rotation);
-
-        // Did a bullet hit the player?
-        if (other.tag == "Player")
-        {
-            Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-            m_GameManager.NextState();
-        }
-
-        Debug.LogWarning(other.gameObject.tag);
-        
-        // Is the enemy a siege enemy?
-        if(other.tag == "Siege")
-        {
-            if(m_siegeHP < 3)
-            {
-                m_siegeHP++;
-                Debug.LogWarning(m_siegeHP);
-            }
-            else
-            {
+            case "Player":
+                // Create both explosions
+                Instantiate(bulletExplosion, transform.position, transform.rotation);
+                Instantiate(explosion, other.transform.position, other.transform.rotation);
                 other.gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            other.gameObject.SetActive(false);
-        }
-        gameObject.SetActive(false);
-    }
+                break;
 
-    // Destroy all bullets after 5 seconds and their particle effects after 7 seconds
-    void Update()
-    {
-        Destroy(gameObject, 5);
-        //Destroy(bulletExplosion, 7); // FIX THIS
+            case "Siege":
+                // Create small explosion and decrease health
+                Instantiate(bulletExplosion, transform.position, transform.rotation);
+                // Most of this is in its own script
+                break;
+
+            case "Caster":
+                Instantiate(bulletExplosion, transform.position, transform.rotation);
+                other.gameObject.SetActive(false);
+                break;
+
+            case "Super":
+                Instantiate(bulletExplosion, transform.position, transform.rotation);
+                other.gameObject.SetActive(false);
+                break;
+
+            case "Bullet":
+                Instantiate(bulletExplosion, transform.position, transform.rotation);
+                break;
+
+            default:
+                break;
+        }
+        // Remove the bullet from view
+        gameObject.SetActive(false);
     }
 }

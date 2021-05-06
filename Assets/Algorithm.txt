@@ -1,9 +1,14 @@
-Enemy Pathing:
-
-FormCaster
-
-
-FormSiege
+Update()
+	Bob()
 
 
-FormSuper
+Bob()
+	switch (get tag)
+		case "Caster"
+			Move up and down by 1 unit
+		case "Siege"
+			Slowly move up and down by 1 unit
+		case "Super"
+			Move up and down by 1 unit
+		default
+			Log an error in the console

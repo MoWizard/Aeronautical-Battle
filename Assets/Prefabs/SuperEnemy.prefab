@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 6164769642164208510}
   - component: {fileID: 9047739491880720695}
   - component: {fileID: 5269816109437623322}
+  - component: {fileID: -8154330919911005025}
   m_Layer: 0
   m_Name: SuperEnemy
   m_TagString: Super
@@ -149,6 +150,18 @@ MonoBehaviour:
   bullet: {fileID: 9053074423898080008, guid: 35d9392a91ec31c4a9d4f63a00cf8432, type: 3}
   bulletSpawn: {fileID: 1325127908865052158}
   fireRate: 0.75
+--- !u!114 &-8154330919911005025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5598395859791083426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1dfc69cbd99d244ba8a9a7f38b2f87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6789426614237676849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -198,6 +211,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4888127913651414234, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117940935538691441, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8470505263354074825, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
@@ -262,6 +279,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8117940935538691441, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8470505263354074825, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
       propertyPath: m_Name
       value: landinggear_back_left
@@ -280,6 +301,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8928991575049733553}
     m_Modifications:
+    - target: {fileID: -6456643397887935649, guid: 7d55ae198eca90d46b6acbf94fa54b86, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 947099927166911446, guid: 7d55ae198eca90d46b6acbf94fa54b86, type: 3}
       propertyPath: m_RootOrder
       value: 2

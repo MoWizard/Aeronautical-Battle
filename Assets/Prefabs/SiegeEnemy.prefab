@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1119492196011795247}
   - component: {fileID: 9101470567834570373}
   - component: {fileID: 5558625557241427955}
+  - component: {fileID: -7399536108557918287}
+  - component: {fileID: 4128799099562493882}
   m_Layer: 0
   m_Name: SiegeEnemy
   m_TagString: Siege
@@ -118,7 +120,33 @@ MonoBehaviour:
   enemy: {fileID: 1708529143345895411}
   bullet: {fileID: 9053074423898080008, guid: 35d9392a91ec31c4a9d4f63a00cf8432, type: 3}
   bulletSpawn: {fileID: 6938641557804534691}
-  fireRate: 1
+  fireRate: 0.75
+--- !u!114 &-7399536108557918287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708529143345895411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1dfc69cbd99d244ba8a9a7f38b2f87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4128799099562493882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708529143345895411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 318a3bc59075f4b4fab25ec8f8671381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 1545263287284428218, guid: b9b9f43ad2fa4e048b0cd02eb976bf6d, type: 3}
+  SiegeHP: 5
 --- !u!1 &8857548983017544909
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,6 +228,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8117940935538691441, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8470505263354074825, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
       propertyPath: m_Name
       value: landinggear_back_right
@@ -262,6 +294,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8117940935538691441, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8470505263354074825, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
       propertyPath: m_Name
       value: landinggear_back_left
@@ -280,6 +316,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2445089477293385184}
     m_Modifications:
+    - target: {fileID: -6456643397887935649, guid: 7d55ae198eca90d46b6acbf94fa54b86, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 947099927166911446, guid: 7d55ae198eca90d46b6acbf94fa54b86, type: 3}
       propertyPath: m_RootOrder
       value: 2

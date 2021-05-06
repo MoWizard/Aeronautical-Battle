@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // Reference the player
+    public GameObject player;
+
     // Assigning names to integers though enumerations. StartScreen = 0, SplashScreen = 1, Start = 2, Playing = 3 and GameOver = 4
     public enum GameState
     {
@@ -33,7 +36,31 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        switch (m_GameState)
+        {
+            case GameState.StartScreen:
+
+                break;
+
+            case GameState.MenuScreen:
+
+                break;
+
+            case GameState.ReadyTransition:
+
+                break;
+
+            case GameState.Playing:
+                if (player.activeSelf != true)
+                {
+                    m_GameState = GameState.GameOver;
+                }
+                break;
+
+            case GameState.GameOver:
+
+                break;
+        }
     }
 
     public void NextState()
