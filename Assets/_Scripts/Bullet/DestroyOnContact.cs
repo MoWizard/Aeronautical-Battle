@@ -10,6 +10,7 @@ public class DestroyOnContact : MonoBehaviour
 
     // Retrieve the particle effects
     public GameObject bulletExplosion;
+    public GameObject smallExplosion;
     public GameObject explosion;
 
     void Awake()
@@ -42,12 +43,18 @@ public class DestroyOnContact : MonoBehaviour
 
             case "Caster":
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+                Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
                 other.gameObject.SetActive(false);
                 break;
 
             case "Super":
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+                Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
                 other.gameObject.SetActive(false);
+                break;
+
+            case "Homing":
+                Instantiate(bulletExplosion, transform.position, transform.rotation);
                 break;
 
             case "Bullet":
@@ -58,6 +65,9 @@ public class DestroyOnContact : MonoBehaviour
                 break;
         }
         // Remove the bullet from view
-        gameObject.SetActive(false);
+        if(gameObject.tag == "Bullet")
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

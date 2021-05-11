@@ -2,26 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SiegeHealth : MonoBehaviour
+public class HomingHealth : MonoBehaviour
 {
     // Retrieve the particle effects
-    public GameObject explosion;
+    public GameObject smallExplosion;
 
-    public int SiegeHP = 5;
+    public int HomingHP = 2;
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Bullet")
+        if (other.gameObject.tag == "Bullet")
         {
-            if(SiegeHP <= 1)
+            if (HomingHP <= 1)
             {
                 // Explode the Siege Enemy
-                Instantiate(explosion, transform.position, transform.rotation);
+                Instantiate(smallExplosion, transform.position, transform.rotation);
                 gameObject.SetActive(false);
             }
             else
             {
-                SiegeHP--;
+                HomingHP--;
             }
         }
     }

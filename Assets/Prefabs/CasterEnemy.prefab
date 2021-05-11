@@ -95,8 +95,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 5406744431735925206}
   bullet: {fileID: 9053074423898080008, guid: 35d9392a91ec31c4a9d4f63a00cf8432, type: 3}
+  homingBullet: {fileID: 9053074423898080008, guid: d741d5c7895ec6a40983e5103041aa4a, type: 3}
   bulletSpawn: {fileID: 129788536880297211}
   fireRate: 1
+  superFireRate: 0
 --- !u!114 &-1357287568405516373
 MonoBehaviour:
   m_ObjectHideFlags: 0

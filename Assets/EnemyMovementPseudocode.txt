@@ -1,0 +1,59 @@
+
+Reference Enemy Game Type
+Reference GameManager
+
+Create Formation 1, 2, 3, 4 and 5 Arrays // These will contain the transform locations for the enemy spawn
+
+Update()
+	Bob()
+	MoveToPosition()
+
+
+Bob()
+	switch (get tag)
+		case "Caster"
+			Move up and down by 1 unit
+		case "Siege"
+			Slowly move up and down by 1 unit
+		case "Super"
+			Move up and down by 1 unit
+		default
+			Log an error in the console
+
+
+MoveToPosition()
+	switch (get Game Stage)
+		case "FirstStage"
+			// Check if there is an enemy currently on the spawn location
+			for(int i = 0; i < length of formation1 array; i++)
+				if(enemy i transform != formation1 i transform)
+					Instantiate enemy -20 units from the i transform in the z direction
+					Enemy translate 20 units forward
+		
+		case "SecondStage"
+			// Check if there is an enemy currently on the spawn location
+			for(int i = 0; i < length of formation2 array; i++)
+				if(enemy i transform != formation2 i transform)
+					Instantiate enemy -20 units from the i transform in the z direction
+					Enemy translate 20 units forward
+
+		case "ThirdStage"
+			// Check if there is an enemy currently on the spawn location
+			for(int i = 0; i < length of formation3 array; i++)
+				if(enemy i transform != formation3 i transform)
+					Instantiate enemy -20 units from the i transform in the z direction
+					Enemy translate 20 units forward
+
+		case "FourthStage"
+			// Check if there is an enemy currently on the spawn location
+			for(int i = 0; i < length of formation4 array; i++)
+				if(enemy i transform != formation4 i transform)
+					Instantiate enemy -20 units from the i transform in the z direction
+					Enemy translate 20 units forward
+
+		case "FifthStage"
+			// Check if there is an enemy currently on the spawn location
+			for(int i = 0; i < length of formation5 array; i++)
+				if(enemy i transform != formation5 i transform)
+					Instantiate enemy -20 units from the i transform in the z direction
+					Enemy translate 20 units forward

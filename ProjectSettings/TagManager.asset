@@ -9,6 +9,7 @@ TagManager:
   - Boundary
   - Siege
   - Super
+  - Homing
   layers:
   - Default
   - TransparentFX

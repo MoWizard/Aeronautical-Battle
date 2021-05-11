@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        m_GameManager = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -49,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Change again once the game manager is being worked on
-        if(m_GameManager.State != GameManager.GameState.Playing)
+        if(m_GameManager.State == GameManager.GameState.Playing)
         {
             Move();
             Turn();

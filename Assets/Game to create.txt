@@ -14,6 +14,9 @@ Fuel:
  - Start with 100
  - Decrease by 3 every 5 seconds
 
+ Boost:
+ - Allows faster shooting
+
 
 Main Menu:
   - Title
@@ -21,23 +24,18 @@ Main Menu:
   - Highscore
   - Exit
 
-Create the Psuedocode
+Create the Psuedocode!!!
 
 https://learn.unity.com/tutorial/boundaries-hazards-and-enemies?uv=5.x&projectId=5c5148e1edbc2a001fd5bdfe#5c7f8528edbc2a002053b72f
 
 Start of game:
 Player Pos = Vector3(0,6.5,-28)
-Size of Cam = 43
 
-During game:
-Size of Cam = 20
 
-https://www.youtube.com/watch?v=ig-0oJgy7NI&ab_channel=SingleSaplingGames
+https://www.youtube.com/watch?v=ig-0oJgy7NI&ab_channel=SingleSaplingGames - Particle Effect Tutorial
 
 
 start couroutine x
 
 IEnumerator x
 yield return new WaitForSeconds(SpawnInterval);
-
-Instantiate(Object to Spawn, transform, true);

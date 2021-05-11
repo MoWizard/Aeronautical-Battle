@@ -119,8 +119,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 1708529143345895411}
   bullet: {fileID: 9053074423898080008, guid: 35d9392a91ec31c4a9d4f63a00cf8432, type: 3}
+  homingBullet: {fileID: 9053074423898080008, guid: d741d5c7895ec6a40983e5103041aa4a, type: 3}
   bulletSpawn: {fileID: 6938641557804534691}
   fireRate: 0.75
+  superFireRate: 0
 --- !u!114 &-7399536108557918287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,6 +135,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec1dfc69cbd99d244ba8a9a7f38b2f87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  formation:
+    FirstForm:
+    - {fileID: 0}
+    SecondForm: []
+    ThirdForm: []
+    FourthForm:
+    - {fileID: 0}
+    - {fileID: 0}
+    FifthForm: []
+  m_Caster: {fileID: 0}
+  m_Siege: {fileID: 0}
+  m_Super: {fileID: 0}
 --- !u!114 &4128799099562493882
 MonoBehaviour:
   m_ObjectHideFlags: 0
