@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c36f3a60348d62845aadd74b1142b4fa
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_Caster: {fileID: 5406744431735925206, guid: 039c978eea5abd04d868bb050af70428, type: 3}
+  - m_Siege: {fileID: 1708529143345895411, guid: 1feee68578b0aeb46b179492a0ba73b4, type: 3}
+  - m_Super: {fileID: 5598395859791083426, guid: 0e351522ddd80c445a23595cc062bf3c, type: 3}
+  - enemyType: {instanceID: 0}
+  - self: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

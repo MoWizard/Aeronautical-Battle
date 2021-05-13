@@ -8,6 +8,11 @@ public class DestroyOnContact : MonoBehaviour
     GameManager m_GameManager;
     SiegeHealth m_SiegeHealth;
 
+    // Retrieve audio
+    //public AudioSource bulletExplosionAudio;
+    //public AudioSource smallExplosionAudio;
+    //public AudioSource explosionAudio;
+
     // Retrieve the particle effects
     public GameObject bulletExplosion;
     public GameObject smallExplosion;

@@ -6,13 +6,38 @@ public class GameManager : MonoBehaviour
 {
     // Reference the player
     public GameObject m_player;
+    public PlayerFuel m_PlayerFuel;
 
-    private float m_gameTime = 0;
+    // Create Timer
+    public float m_gameTime = 0;
+    public float GameTime { get { return m_gameTime; } }
+
+    // Check if the Enemy Spawn is occupied or not
+    //public EnemyCollisions m_EnemyCollisions;
+
+    // Reference Enemy Types
+    public GameObject m_Caster;
+    public GameObject m_Siege;
+    public GameObject m_Super;
+
+    // Reference each formation
+    //public GameObject Formation1;
+    //public GameObject Formation2;
+    //public GameObject Formation3;
+    //public GameObject Formation4;
+    //public GameObject Formation5;
+
+    // Put each formation into an array
+    public GameObject[] FirstForm;
+    public GameObject[] SecondForm;
+    public GameObject[] ThirdForm;
+    public GameObject[] FourthForm;
+    public GameObject[] FifthForm;
 
     // Reference all the enemies in the scene
-    public GameObject[] m_casters;
-    public GameObject[] m_sieges;
-    public GameObject[] m_supers;
+    public GameObject[] m_CasterArray;
+    public GameObject[] m_SiegeArray;
+    public GameObject[] m_SuperArray;
 
     // Assigning names to integers though enumerations. StartScreen = 0, SplashScreen = 1, Start = 2, Playing = 3 and GameOver = 4
     public enum GameState
@@ -42,9 +67,12 @@ public class GameManager : MonoBehaviour
     private GameStage m_GameStage;
     public GameStage Stage { get { return m_GameStage; } }
 
+
     // Start is called before the first frame update
     private void Start()
     {
+        m_PlayerFuel = m_player.GetComponent<PlayerFuel>();
+
         m_GameState = GameState.Playing;
         m_GameStage = GameStage.FirstStage;
     }
@@ -73,7 +101,12 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.Playing:
-                Debug.Log(m_gameTime);
+                //Debug.Log(m_gameTime);
+                if(m_PlayerFuel.reduceFuel == false)
+                {
+                    StartCoroutine(m_PlayerFuel.DecreaseFuel());
+                    m_PlayerFuel.reduceFuel = true;
+                }
                 if (m_player.activeSelf != true)
                 {
                     m_GameState = GameState.GameOver;
@@ -81,6 +114,7 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     m_gameTime += Time.deltaTime;
+                    MoveToPosition();
                 }
                 break;
 
@@ -127,5 +161,29 @@ public class GameManager : MonoBehaviour
         {
             m_GameStage = GameStage.Fifthstage;
         }
+    }
+
+    // Move the enemies towards the spawn location
+    public void MoveToPosition()
+    {
+        /*
+        switch (m_GameStage)
+        {
+            case GameStage.FirstStage:
+                for (int i = 0; i < FirstForm.Length; i++)
+                {
+                    Debug.LogWarning(m_EnemyCollisions.isOccupied);
+                    if (m_EnemyCollisions.isOccupied == false)
+                    {
+                        // Create a new enemy 20 units in the z direction away from the spawn location.
+                        GameObject newEnemy = Instantiate(m_EnemyCollisions.enemyType, new Vector3(m_EnemyCollisions.self.position.x, m_EnemyCollisions.self.position.y, m_EnemyCollisions.self.position.z - 20), new Quaternion(0f, 180f, 0f, 0f));
+
+                        // Move the enemy to the position of the spawnpoint
+                        newEnemy.transform.position = Vector3.Lerp(newEnemy.transform.position, new Vector3(newEnemy.transform.position.x, newEnemy.transform.position.y, m_EnemyCollisions.self.position.z), 1);
+                    }
+                }
+                break;
+        }
+        */
     }
 }

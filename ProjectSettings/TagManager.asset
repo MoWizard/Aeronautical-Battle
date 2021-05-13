@@ -10,6 +10,7 @@ TagManager:
   - Siege
   - Super
   - Homing
+  - Formation
   layers:
   - Default
   - TransparentFX
