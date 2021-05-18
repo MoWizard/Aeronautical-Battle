@@ -17,7 +17,7 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         Bob();
-        m_GameManager.MoveToPosition();
+        //m_GameManager.MoveToPosition();
     }
 
     private void Bob()

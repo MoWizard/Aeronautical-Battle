@@ -11,6 +11,9 @@ TagManager:
   - Super
   - Homing
   - Formation
+  - CasterSpawn
+  - SiegeSpawn
+  - SuperSpawn
   layers:
   - Default
   - TransparentFX

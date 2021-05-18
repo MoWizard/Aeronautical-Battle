@@ -6,7 +6,6 @@ public class DestroyOnContact : MonoBehaviour
 {
     // Get the GameManager and Siege Health
     GameManager m_GameManager;
-    SiegeHealth m_SiegeHealth;
 
     // Retrieve audio
     //public AudioSource bulletExplosionAudio;
@@ -67,8 +66,13 @@ public class DestroyOnContact : MonoBehaviour
                 break;
 
             default:
+                if(other.transform.parent.tag == "Formation")
+                {
+                    return;
+                }
                 break;
         }
+
         // Remove the bullet from view
         if(gameObject.tag == "Bullet")
         {

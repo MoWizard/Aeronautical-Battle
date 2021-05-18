@@ -29,6 +29,9 @@ public class PlayerFuel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(m_Fuel <= 0)
+        {
+            // Add player falling with splash in here
+        }
     }
 }

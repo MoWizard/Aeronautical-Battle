@@ -12,20 +12,10 @@ public class GameManager : MonoBehaviour
     public float m_gameTime = 0;
     public float GameTime { get { return m_gameTime; } }
 
-    // Check if the Enemy Spawn is occupied or not
-    //public EnemyCollisions m_EnemyCollisions;
-
     // Reference Enemy Types
     public GameObject m_Caster;
     public GameObject m_Siege;
     public GameObject m_Super;
-
-    // Reference each formation
-    //public GameObject Formation1;
-    //public GameObject Formation2;
-    //public GameObject Formation3;
-    //public GameObject Formation4;
-    //public GameObject Formation5;
 
     // Put each formation into an array
     public GameObject[] FirstForm;
@@ -102,6 +92,8 @@ public class GameManager : MonoBehaviour
 
             case GameState.Playing:
                 //Debug.Log(m_gameTime);
+
+                // Reduce the players fuel
                 if(m_PlayerFuel.reduceFuel == false)
                 {
                     StartCoroutine(m_PlayerFuel.DecreaseFuel());
@@ -114,6 +106,7 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     m_gameTime += Time.deltaTime;
+                    NextStage();
                     MoveToPosition();
                 }
                 break;
@@ -139,51 +132,105 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Create timers for when each stage will go by
+    /*
+    WHAT TO CHANGE:
+     - Instead of set times, use relative times (nextStageTimer -= Time.time)
+     - Once timer is up, don't spawn anymore enemies
+     - Change game stage and set timer
+     - Repeat
+     */
     public void NextStage()
     {
         if(m_gameTime < 20)
         {
+            Debug.Log("First Stage");
             m_GameStage = GameStage.FirstStage;
         }
         else if (m_gameTime >= 20 && m_gameTime < 50)
         {
-            m_GameStage = GameStage.SecondStage;
+            if(GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
+            {
+                Debug.Log("Second Stage");
+                m_GameStage = GameStage.SecondStage;
+            }
         }
         else if (m_gameTime >= 50 && m_gameTime < 80)
         {
-            m_GameStage = GameStage.ThirdStage;
+            if (GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
+            {
+                Debug.Log("Third Stage");
+                m_GameStage = GameStage.ThirdStage;
+            }
         }
         else if (m_gameTime >= 80 && m_gameTime < 120)
         {
-            m_GameStage = GameStage.FourthStage;
+            if (GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
+            {
+                Debug.Log("Fourth Stage");
+                m_GameStage = GameStage.FourthStage;
+            }
         }
         else if (m_gameTime >= 120 && m_gameTime < 200)
         {
-            m_GameStage = GameStage.Fifthstage;
+            if (GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
+            {
+                Debug.Log("Fifth Stage");
+                m_GameStage = GameStage.Fifthstage;
+            }
         }
     }
 
     // Move the enemies towards the spawn location
     public void MoveToPosition()
     {
-        /*
         switch (m_GameStage)
         {
             case GameStage.FirstStage:
-                for (int i = 0; i < FirstForm.Length; i++)
-                {
-                    Debug.LogWarning(m_EnemyCollisions.isOccupied);
-                    if (m_EnemyCollisions.isOccupied == false)
-                    {
-                        // Create a new enemy 20 units in the z direction away from the spawn location.
-                        GameObject newEnemy = Instantiate(m_EnemyCollisions.enemyType, new Vector3(m_EnemyCollisions.self.position.x, m_EnemyCollisions.self.position.y, m_EnemyCollisions.self.position.z - 20), new Quaternion(0f, 180f, 0f, 0f));
+                SpawnEnemy(FirstForm);
+                break;
+            case GameStage.SecondStage:
+                SpawnEnemy(SecondForm);
+                break;
+            case GameStage.ThirdStage:
+                SpawnEnemy(ThirdForm);
+                break;
+            case GameStage.FourthStage:
+                SpawnEnemy(FourthForm);
+                break;
+            case GameStage.Fifthstage:
+                SpawnEnemy(FifthForm);
+                break;
+        }   
+    }
 
-                        // Move the enemy to the position of the spawnpoint
-                        newEnemy.transform.position = Vector3.Lerp(newEnemy.transform.position, new Vector3(newEnemy.transform.position.x, newEnemy.transform.position.y, m_EnemyCollisions.self.position.z), 1);
+    public void SpawnEnemy(GameObject[] formationNumber)
+    {
+        foreach (GameObject g in formationNumber)
+        {
+            if (g.GetComponent<EnemyCollisions>().isOccupied == false)
+            {
+                // Create a new enemy 20 units in the z direction away from the spawn location.
+                GameObject newEnemy = Instantiate(g.GetComponent<EnemyCollisions>().enemyType, new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z + 20f), new Quaternion(0f, 180f, 0f, 0f));
+
+                // Make new enemy the enemy on spawn
+                g.GetComponent<EnemyCollisions>().enemyOnSpawn = newEnemy;
+
+                bool isDone = false;
+
+                // Move the enemy to the position of the spawnpoint
+                while (isDone == false)
+                {
+                    newEnemy.transform.position = Vector3.MoveTowards(newEnemy.transform.position, new Vector3(newEnemy.transform.position.x, newEnemy.transform.position.y, g.transform.position.z), 0.5f);
+                    if (newEnemy.transform.position == g.transform.position)
+                    {
+                        isDone = true;
                     }
                 }
-                break;
+
+                // Change the script bool to true
+                g.GetComponent<EnemyCollisions>().isOccupied = true;
+            }
         }
-        */
     }
 }
