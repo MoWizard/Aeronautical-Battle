@@ -1,15 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    // Reference other scripts
+    private EnemyManager m_EnemyManager;
+
+    // Reference the overlay text to display some cool text
+    public TextMeshProUGUI m_TitleText;
+    public TextMeshProUGUI m_StageMessageText;
+
+    // Reference the buttons in order to do button-y things
+    public Button m_StartButton;
+    public Button m_QuitButton;
+    public Button m_TryAgainButton;
+    public Button m_MainMenuButton;
+
+    // Reference the Panels
+    public GameObject m_HUD;
+    public GameObject m_MainMenuPanel;
+    public GameObject m_GameOverPanel;
+
     // Reference the player
     public GameObject m_player;
-    public PlayerFuel m_PlayerFuel;
+    private PlayerFuel m_PlayerFuel;
 
     // Create Timer
     public float m_gameTime = 0;
+    private float m_startTimer = 3;
     public float GameTime { get { return m_gameTime; } }
 
     // Reference Enemy Types
@@ -17,12 +38,12 @@ public class GameManager : MonoBehaviour
     public GameObject m_Siege;
     public GameObject m_Super;
 
-    // Put each formation into an array
+    /* Put each formation into an array
     public GameObject[] FirstForm;
     public GameObject[] SecondForm;
     public GameObject[] ThirdForm;
     public GameObject[] FourthForm;
-    public GameObject[] FifthForm;
+    public GameObject[] FifthForm;*/
 
     // Reference all the enemies in the scene
     public GameObject[] m_CasterArray;
@@ -57,14 +78,23 @@ public class GameManager : MonoBehaviour
     private GameStage m_GameStage;
     public GameStage Stage { get { return m_GameStage; } }
 
+    // Create the smoothdamp effect
+    private Vector3 m_MoveVelocity;
+    private float m_DampTime = 0.5f;
 
     // Start is called before the first frame update
     private void Start()
     {
+        m_EnemyManager = GetComponent<EnemyManager>();
+
         m_PlayerFuel = m_player.GetComponent<PlayerFuel>();
 
-        m_GameState = GameState.Playing;
-        m_GameStage = GameStage.FirstStage;
+        m_HUD.gameObject.SetActive(false);
+        m_MainMenuPanel.gameObject.SetActive(true);
+        m_GameOverPanel.gameObject.SetActive(false);
+
+        //m_GameState = GameState.Playing;
+        //m_GameStage = GameStage.FirstStage;
     }
 
     public void OnNewGame()
@@ -79,7 +109,9 @@ public class GameManager : MonoBehaviour
         switch (m_GameState)
         {
             case GameState.StartScreen:
-
+                m_HUD.gameObject.SetActive(false);
+                m_MainMenuPanel.gameObject.SetActive(true);
+                m_GameOverPanel.gameObject.SetActive(false);
                 break;
 
             case GameState.MenuScreen:
@@ -87,14 +119,33 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.ReadyTransition:
+                m_HUD.gameObject.SetActive(true);
+                m_MainMenuPanel.gameObject.SetActive(false);
+                m_GameOverPanel.gameObject.SetActive(false);
 
+                m_startTimer -= Time.deltaTime;
+
+                // Write the get ready message
+                m_StageMessageText.text = "Get Ready: " + (int)(m_startTimer + 1);
+
+                if (Input.GetKeyUp(KeyCode.Return) == true || m_startTimer < 0)
+                {
+                    // reset all the variables
+                    m_gameTime = 0;
+                    m_startTimer = 3;
+                    m_StageMessageText.text = "";
+                    m_GameState = GameState.Playing;
+                }
                 break;
 
             case GameState.Playing:
-                //Debug.Log(m_gameTime);
+                // Choose the visual interface
+                m_HUD.gameObject.SetActive(true);
+                m_MainMenuPanel.gameObject.SetActive(false);
+                m_GameOverPanel.gameObject.SetActive(false);
 
                 // Reduce the players fuel
-                if(m_PlayerFuel.reduceFuel == false)
+                if (m_PlayerFuel.reduceFuel == false)
                 {
                     StartCoroutine(m_PlayerFuel.DecreaseFuel());
                     m_PlayerFuel.reduceFuel = true;
@@ -107,12 +158,18 @@ public class GameManager : MonoBehaviour
                 {
                     m_gameTime += Time.deltaTime;
                     NextStage();
-                    MoveToPosition();
+                    m_EnemyManager.ChangeForms();
                 }
                 break;
 
             case GameState.GameOver:
+                m_HUD.gameObject.SetActive(false);
+                m_MainMenuPanel.gameObject.SetActive(false);
+                m_GameOverPanel.gameObject.SetActive(true);
 
+                // Write the game over message
+                m_StageMessageText.text = "Game Over";
+                m_StageMessageText.transform.position = Vector3.SmoothDamp(transform.position, m_TitleText.transform.position, ref m_MoveVelocity, Time.deltaTime * m_DampTime);
                 break;
         }
 
@@ -126,10 +183,21 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("GAME CLOSED");
-                Application.Quit();
+                OnQuitGame();
             }
         }
+    }
+
+    public void OnQuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void OnMainMenuButton()
+    {
+        m_HUD.gameObject.SetActive(false);
+        m_MainMenuPanel.gameObject.SetActive(true);
+        m_GameOverPanel.gameObject.SetActive(false);
     }
 
     // Create timers for when each stage will go by
@@ -177,59 +245,6 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Fifth Stage");
                 m_GameStage = GameStage.Fifthstage;
-            }
-        }
-    }
-
-    // Move the enemies towards the spawn location
-    public void MoveToPosition()
-    {
-        switch (m_GameStage)
-        {
-            case GameStage.FirstStage:
-                SpawnEnemy(FirstForm);
-                break;
-            case GameStage.SecondStage:
-                SpawnEnemy(SecondForm);
-                break;
-            case GameStage.ThirdStage:
-                SpawnEnemy(ThirdForm);
-                break;
-            case GameStage.FourthStage:
-                SpawnEnemy(FourthForm);
-                break;
-            case GameStage.Fifthstage:
-                SpawnEnemy(FifthForm);
-                break;
-        }   
-    }
-
-    public void SpawnEnemy(GameObject[] formationNumber)
-    {
-        foreach (GameObject g in formationNumber)
-        {
-            if (g.GetComponent<EnemyCollisions>().isOccupied == false)
-            {
-                // Create a new enemy 20 units in the z direction away from the spawn location.
-                GameObject newEnemy = Instantiate(g.GetComponent<EnemyCollisions>().enemyType, new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z + 20f), new Quaternion(0f, 180f, 0f, 0f));
-
-                // Make new enemy the enemy on spawn
-                g.GetComponent<EnemyCollisions>().enemyOnSpawn = newEnemy;
-
-                bool isDone = false;
-
-                // Move the enemy to the position of the spawnpoint
-                while (isDone == false)
-                {
-                    newEnemy.transform.position = Vector3.MoveTowards(newEnemy.transform.position, new Vector3(newEnemy.transform.position.x, newEnemy.transform.position.y, g.transform.position.z), 0.5f);
-                    if (newEnemy.transform.position == g.transform.position)
-                    {
-                        isDone = true;
-                    }
-                }
-
-                // Change the script bool to true
-                g.GetComponent<EnemyCollisions>().isOccupied = true;
             }
         }
     }

@@ -67,12 +67,15 @@ public class EnemyCollisions : MonoBehaviour
         else
         {
             isOccupied = false;
+            Debug.LogError("Crash caused by object with tag " + other.tag + "with the name " + other.name);
             Debug.LogError("There is no enemyType on " + gameObject.name + " in " + gameObject.transform.parent.name);
         }
     }
 
     void Update()
     {
+        // This will check if there is an enemy on the spawn location, and if not
+        // it will delete a disabled enemy and set it to null.
         if(enemyOnSpawn != null)
         {
             if (enemyOnSpawn.activeSelf == true)
@@ -90,6 +93,5 @@ public class EnemyCollisions : MonoBehaviour
         {
             isOccupied = false;
         }
-        
     }
 }

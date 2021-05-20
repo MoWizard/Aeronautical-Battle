@@ -27,27 +27,29 @@ public class EnemyShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (enemy.tag)
+        if(player != null)
         {
-            case "Super":
-                if (player.activeSelf == true && Time.time > nextFire)
-                {
-                    // Repeatedly fire bullets
-                    nextFire = Time.time + superFireRate;
-                    Instantiate(homingBullet, bulletSpawn.position, bulletSpawn.rotation);
-                }
-                break;
+            switch (enemy.tag)
+            {
+                case "Super":
+                    if (player.activeSelf == true && Time.time > nextFire)
+                    {
+                        // Repeatedly fire bullets
+                        nextFire = Time.time + superFireRate;
+                        Instantiate(homingBullet, bulletSpawn.position, bulletSpawn.rotation);
+                    }
+                    break;
 
-            case "Siege":
-            case "Caster":
-                if (player.activeSelf == true && Time.time > nextFire)
-                {
-                    // Repeatedly fire bullets
-                    nextFire = Time.time + fireRate;
-                    Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
-                }
-                break;
+                case "Siege":
+                case "Caster":
+                    if (player.activeSelf == true && Time.time > nextFire)
+                    {
+                        // Repeatedly fire bullets
+                        nextFire = Time.time + fireRate;
+                        Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+                    }
+                    break;
+            }
         }
-        
     }
 }

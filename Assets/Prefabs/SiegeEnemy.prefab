@@ -112,7 +112,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1708529143345895411}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1bdc5264bfa536c4587d2536038e8ab4, type: 3}
   m_Name: 
@@ -135,18 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec1dfc69cbd99d244ba8a9a7f38b2f87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  formation:
-    FirstForm:
-    - {fileID: 0}
-    SecondForm: []
-    ThirdForm: []
-    FourthForm:
-    - {fileID: 0}
-    - {fileID: 0}
-    FifthForm: []
-  m_Caster: {fileID: 0}
-  m_Siege: {fileID: 0}
-  m_Super: {fileID: 0}
 --- !u!114 &4128799099562493882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +238,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: landinggear_back_right
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8117940935538691441, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
 --- !u!4 &9071719744510283538 stripped
 Transform:
@@ -316,7 +305,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: landinggear_back_left
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8117940935538691441, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e9a661355d4b56b43bbf925a68416dda, type: 3}
 --- !u!4 &2220550953160671468 stripped
 Transform:
@@ -382,7 +372,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: landinggear_front
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -6456643397887935649, guid: 7d55ae198eca90d46b6acbf94fa54b86, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7d55ae198eca90d46b6acbf94fa54b86, type: 3}
 --- !u!4 &9188226653567823956 stripped
 Transform:

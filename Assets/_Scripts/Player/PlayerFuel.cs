@@ -19,7 +19,7 @@ public class PlayerFuel : MonoBehaviour
         while (true)
         {
             m_Fuel -= 3;
-            Debug.LogWarning("Fuel: " + m_Fuel);
+            //Debug.LogWarning("Fuel: " + m_Fuel);
             m_FuelBar.fillAmount = m_Fuel / 100;
             yield return new WaitForSeconds(2.5f);
         }
