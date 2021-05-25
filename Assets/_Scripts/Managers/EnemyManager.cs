@@ -16,16 +16,34 @@ public class EnemyManager : MonoBehaviour
 
     private Vector3 m_MoveVelocity;
 
+    private bool m_enemiesAlive(GameObject[] form, GameObject spawner)
+    {
+        int enemiesLeft = form.Length;
+
+        for (int i = 0; i < form.Length; i++)
+        {
+            // Check how many enemies are left
+            if (spawner.GetComponent<EnemyCollisions>().isOccupied == false)
+            {
+                enemiesLeft--;
+            }
+        }
+
+        // Change game stage if there are no more enemies
+        if (enemiesLeft <= 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool EnemiesAlive;
+
     // Start is called before the first frame update
     void Start()
     {
         m_GameManager = GetComponent<GameManager>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void ChangeForms()
@@ -55,7 +73,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (GameObject g in formationNumber)
         {
-            if (g.GetComponent<EnemyCollisions>().isOccupied == false)
+            if (g.GetComponent<EnemyCollisions>().isOccupied == false && m_GameManager.ChangingStage == false)
             {
                 // Create a new enemy 20 units in the z direction away from the spawn location.
                 GameObject newEnemy = Instantiate(g.GetComponent<EnemyCollisions>().enemyType, new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z + 20f), new Quaternion(0f, 180f, 0f, 0f));
@@ -69,21 +87,37 @@ public class EnemyManager : MonoBehaviour
                 // Change the script bool to true
                 g.GetComponent<EnemyCollisions>().isOccupied = true;
             }
+            else
+            {
+                if(m_enemiesAlive(formationNumber, g) == false)
+                {
+                    EnemiesAlive = false;
+                }
+                else
+                {
+                    EnemiesAlive = true;
+                }
+            }
         }
     }
 
     // Move the enemy to the spawner
     IEnumerator MoveEnemyForward(GameObject enemy, GameObject spawner)
     {
-        Debug.LogWarning("Inside the coroutine");
-
-        while (enemy.transform.position != spawner.transform.position)
+        while(!Mathf.Approximately(enemy.transform.position.z, spawner.transform.position.z))
         {
-            Debug.LogWarning("Supposedly Moving");
-            enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, new Vector3(enemy.transform.position.x, enemy.transform.position.y, spawner.transform.position.z), ref m_MoveVelocity, Time.deltaTime * 0.2f);
-            yield return new WaitForSeconds(5f);
+            // Slowly move the enemy towards the spawn location
+            enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, spawner.transform.position, ref m_MoveVelocity, Time.deltaTime * 100f);
+
+            // Check if the enemy is really close to the spawner
+            if (m_MoveVelocity.z <= 0.001 && enemy.transform.position.z <= 66)
+            {
+                break;
+            }
+            // Wait for each frame to move again - This will enable the movements to be smooth, since this is a while loop
+            yield return new WaitForEndOfFrame();
         }
-        
-        yield break;
+        // End the coroutine
+        yield return null;
     }
 }

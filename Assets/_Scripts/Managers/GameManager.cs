@@ -28,9 +28,11 @@ public class GameManager : MonoBehaviour
     public GameObject m_player;
     private PlayerFuel m_PlayerFuel;
 
-    // Create Timer
+    // Create Timers
     public float m_gameTime = 0;
     private float m_startTimer = 3;
+    private float m_nextStageTimer = 0;
+
     public float GameTime { get { return m_gameTime; } }
 
     // Reference Enemy Types
@@ -78,6 +80,8 @@ public class GameManager : MonoBehaviour
     private GameStage m_GameStage;
     public GameStage Stage { get { return m_GameStage; } }
 
+    public bool ChangingStage = false;
+
     // Create the smoothdamp effect
     private Vector3 m_MoveVelocity;
     private float m_DampTime = 0.5f;
@@ -92,9 +96,6 @@ public class GameManager : MonoBehaviour
         m_HUD.gameObject.SetActive(false);
         m_MainMenuPanel.gameObject.SetActive(true);
         m_GameOverPanel.gameObject.SetActive(false);
-
-        //m_GameState = GameState.Playing;
-        //m_GameStage = GameStage.FirstStage;
     }
 
     public void OnNewGame()
@@ -135,6 +136,8 @@ public class GameManager : MonoBehaviour
                     m_startTimer = 3;
                     m_StageMessageText.text = "";
                     m_GameState = GameState.Playing;
+                    m_GameStage = GameStage.FirstStage;
+                    m_nextStageTimer = 20f;
                 }
                 break;
 
@@ -210,42 +213,108 @@ public class GameManager : MonoBehaviour
      */
     public void NextStage()
     {
-        if(m_gameTime < 20)
+        Debug.Log(m_nextStageTimer);
+
+        // Change the stages according to the time and the enemies alive
+        switch (m_GameStage)
         {
-            Debug.Log("First Stage");
-            m_GameStage = GameStage.FirstStage;
-        }
-        else if (m_gameTime >= 20 && m_gameTime < 50)
-        {
-            if(GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
-            {
-                Debug.Log("Second Stage");
-                m_GameStage = GameStage.SecondStage;
-            }
-        }
-        else if (m_gameTime >= 50 && m_gameTime < 80)
-        {
-            if (GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
-            {
-                Debug.Log("Third Stage");
-                m_GameStage = GameStage.ThirdStage;
-            }
-        }
-        else if (m_gameTime >= 80 && m_gameTime < 120)
-        {
-            if (GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
-            {
-                Debug.Log("Fourth Stage");
-                m_GameStage = GameStage.FourthStage;
-            }
-        }
-        else if (m_gameTime >= 120 && m_gameTime < 200)
-        {
-            if (GameObject.FindGameObjectsWithTag("Caster") == null || GameObject.FindGameObjectsWithTag("Siege") == null || GameObject.FindGameObjectsWithTag("Super") == null)
-            {
-                Debug.Log("Fifth Stage");
-                m_GameStage = GameStage.Fifthstage;
-            }
+            case GameStage.FirstStage:
+                // Wait for x amount of seconds before moving onto the next stage
+                if (m_nextStageTimer > 0)
+                {
+                    m_nextStageTimer -= Time.deltaTime;
+                }
+
+                // Once the timer hits 0 we can wait for the player to clear all the enemies and move onto the next stage
+                if (m_nextStageTimer <= 0)
+                {
+                    ChangingStage = true;
+                    if (m_EnemyManager.EnemiesAlive == false)
+                    {
+                        m_GameStage = GameStage.SecondStage;
+                        m_nextStageTimer = 40f;
+                        ChangingStage = false;
+                    }
+                }
+                break;
+            
+            case GameStage.SecondStage:
+                // Wait for x amount of seconds before moving onto the next stage
+                if (m_nextStageTimer > 0)
+                {
+                    m_nextStageTimer -= Time.deltaTime;
+                }
+
+                // Once the timer hits 0 we can wait for the player to clear all the enemies and move onto the next stage
+                if (m_nextStageTimer <= 0)
+                {
+                    ChangingStage = true;
+                    if (m_EnemyManager.EnemiesAlive == false)
+                    {
+                        m_GameStage = GameStage.ThirdStage;
+                        m_nextStageTimer = 60f;
+                        ChangingStage = false;
+                    }
+                }
+                break;
+            
+            case GameStage.ThirdStage:
+                // Wait for x amount of seconds before moving onto the next stage
+                if (m_nextStageTimer > 0)
+                {
+                    m_nextStageTimer -= Time.deltaTime;
+                }
+
+                // Once the timer hits 0 we can wait for the player to clear all the enemies and move onto the next stage
+                if (m_nextStageTimer <= 0)
+                {
+                    ChangingStage = true;
+                    if (m_EnemyManager.EnemiesAlive == false)
+                    {
+                        m_GameStage = GameStage.FourthStage;
+                        m_nextStageTimer = 30f;
+                        ChangingStage = false;
+                    }
+                }
+                break;
+            
+            case GameStage.FourthStage:
+                // Wait for x amount of seconds before moving onto the next stage
+                if (m_nextStageTimer > 0)
+                {
+                    m_nextStageTimer -= Time.deltaTime;
+                }
+
+                // Once the timer hits 0 we can wait for the player to clear all the enemies and move onto the next stage
+                if (m_nextStageTimer <= 0)
+                {
+                    ChangingStage = true;
+                    if (m_EnemyManager.EnemiesAlive == false)
+                    {
+                        m_GameStage = GameStage.Fifthstage;
+                        m_nextStageTimer = 120f;
+                        ChangingStage = false;
+                    }
+                }
+                break;
+            
+            case GameStage.Fifthstage:
+                // Wait for x amount of seconds before moving onto the next stage
+                if (m_nextStageTimer > 0)
+                {
+                    m_nextStageTimer -= Time.deltaTime;
+                }
+
+                // Once the timer hits 0 we can wait for the player to clear all the enemies and finish the game
+                if (m_nextStageTimer <= 0)
+                {
+                    ChangingStage = true;
+                    if (m_EnemyManager.EnemiesAlive == false)
+                    {
+                        m_GameState = GameState.GameOver;
+                    }
+                }
+                break;
         }
     }
 }

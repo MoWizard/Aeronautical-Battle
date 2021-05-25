@@ -17,9 +17,6 @@ public class EnemyCollisions : MonoBehaviour
 
     [HideInInspector]
     public GameObject enemyType;
-    
-    //[HideInInspector]
-    //public Transform self;
 
     void Start()
     {
@@ -43,8 +40,7 @@ public class EnemyCollisions : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        //self = gameObject.transform;
-
+        // Check which tag is in use
         if (other.tag == "Caster" && gameObject.tag == "CasterSpawn")
         {
             enemyOnSpawn = other.gameObject;
@@ -67,8 +63,8 @@ public class EnemyCollisions : MonoBehaviour
         else
         {
             isOccupied = false;
-            Debug.LogError("Crash caused by object with tag " + other.tag + "with the name " + other.name);
-            Debug.LogError("There is no enemyType on " + gameObject.name + " in " + gameObject.transform.parent.name);
+            Debug.LogWarning("Crash caused by object with tag " + other.tag + " with the name " + other.name);
+            Debug.LogWarning("There is no enemyType on " + gameObject.name + " in " + gameObject.transform.parent.name);
         }
     }
 
