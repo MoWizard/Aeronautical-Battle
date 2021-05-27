@@ -8,11 +8,30 @@ public class PlayerFuel : MonoBehaviour
     // Reference Game Manager
     public GameManager m_GameManager;
 
+    public ParticleSystem LowFuelParticles;
+
     public Image m_FuelBar;
 
-    private float m_Fuel = 103;
-
+    // Create variables needed to display and count the fuel
+    private float m_Fuel = 36;
     public bool reduceFuel = false;
+
+    void Start()
+    {
+        LowFuelParticles.Pause();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        var ParticleEmissions = LowFuelParticles.emission;
+
+        if (m_Fuel <= 30)
+        {
+            LowFuelParticles.Play();
+            ParticleEmissions.rateOverTime = -m_Fuel/2 + 15; // Cool Linear Function
+        }
+    }
 
     public IEnumerator DecreaseFuel()
     {
@@ -25,13 +44,8 @@ public class PlayerFuel : MonoBehaviour
         }
     }
 
-
-    // Update is called once per frame
-    void Update()
+    public IEnumerator FallToDeath()
     {
-        if(m_Fuel <= 0)
-        {
-            // Add player falling with splash in here
-        }
+        yield return new WaitForSeconds(1);
     }
 }

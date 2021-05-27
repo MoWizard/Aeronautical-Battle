@@ -4,22 +4,13 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    // Reference the Game Manager
-    private GameManager m_GameManager;
-
-    private void Start()
-    {
-        // Retrieve the Game Manager
-        m_GameManager = FindObjectOfType<GameManager>();
-    }
-
     // Update is called once per frame
     void Update()
     {
         Bob();
-        //m_GameManager.MoveToPosition();
     }
 
+    // Bob the enemies up and down by a certain amount
     private void Bob()
     {
         switch (gameObject.tag)
@@ -38,6 +29,4 @@ public class EnemyMovement : MonoBehaviour
                 break;
         }
     }
-
-    
 }

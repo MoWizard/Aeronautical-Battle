@@ -15,8 +15,9 @@ public class EnemyManager : MonoBehaviour
     public GameObject[] FifthForm;
 
     private Vector3 m_MoveVelocity;
+    public bool m_FirstSuper = true;
 
-    private bool m_enemiesAlive(GameObject[] form, GameObject spawner)
+    private bool EnemiesAlive(GameObject[] form, GameObject spawner)
     {
         int enemiesLeft = form.Length;
 
@@ -38,7 +39,7 @@ public class EnemyManager : MonoBehaviour
         return true;
     }
 
-    public bool EnemiesAlive;
+    public bool m_enemiesAlive;
 
     // Start is called before the first frame update
     void Start()
@@ -46,23 +47,57 @@ public class EnemyManager : MonoBehaviour
         m_GameManager = GetComponent<GameManager>();
     }
 
+    /* Change the formation type each stage
+     * Firstly it enables the form that is required and disables the rest.
+     * It then spawns in the enemies for that specific form.
+    */
     public void ChangeForms()
     {
         switch (m_GameManager.Stage)
         {
             case GameManager.GameStage.FirstStage:
+                EnableForm(FirstForm);
+                DisableForm(SecondForm);
+                DisableForm(ThirdForm);
+                DisableForm(FourthForm);
+                DisableForm(FifthForm);
+
                 SpawnEnemy(FirstForm);
                 break;
             case GameManager.GameStage.SecondStage:
+                DisableForm(FirstForm);
+                EnableForm(SecondForm);
+                DisableForm(ThirdForm);
+                DisableForm(FourthForm);
+                DisableForm(FifthForm);
+
                 SpawnEnemy(SecondForm);
                 break;
             case GameManager.GameStage.ThirdStage:
+                DisableForm(FirstForm);
+                DisableForm(SecondForm);
+                EnableForm(ThirdForm);
+                DisableForm(FourthForm);
+                DisableForm(FifthForm);
+
                 SpawnEnemy(ThirdForm);
                 break;
             case GameManager.GameStage.FourthStage:
+                DisableForm(FirstForm);
+                DisableForm(SecondForm);
+                DisableForm(ThirdForm);
+                EnableForm(FourthForm);
+                DisableForm(FifthForm);
+
                 SpawnEnemy(FourthForm);
                 break;
             case GameManager.GameStage.Fifthstage:
+                DisableForm(FirstForm);
+                DisableForm(SecondForm);
+                DisableForm(ThirdForm);
+                DisableForm(FourthForm);
+                EnableForm(FifthForm);
+
                 SpawnEnemy(FifthForm);
                 break;
         }
@@ -89,13 +124,13 @@ public class EnemyManager : MonoBehaviour
             }
             else
             {
-                if(m_enemiesAlive(formationNumber, g) == false)
+                if(EnemiesAlive(formationNumber, g) == false)
                 {
-                    EnemiesAlive = false;
+                    m_enemiesAlive = false;
                 }
                 else
                 {
-                    EnemiesAlive = true;
+                    m_enemiesAlive = true;
                 }
             }
         }
@@ -104,20 +139,48 @@ public class EnemyManager : MonoBehaviour
     // Move the enemy to the spawner
     IEnumerator MoveEnemyForward(GameObject enemy, GameObject spawner)
     {
-        while(!Mathf.Approximately(enemy.transform.position.z, spawner.transform.position.z))
+        // Check if this is the first Super enemy
+        if (enemy.CompareTag("Super") && m_FirstSuper == false)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        else if (enemy.CompareTag("Super") && m_FirstSuper == true)
+        {
+            m_FirstSuper = false;
+        }
+
+        while (!Mathf.Approximately(enemy.transform.position.z, spawner.transform.position.z))
         {
             // Slowly move the enemy towards the spawn location
             enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, spawner.transform.position, ref m_MoveVelocity, Time.deltaTime * 100f);
 
             // Check if the enemy is really close to the spawner
-            if (m_MoveVelocity.z <= 0.001 && enemy.transform.position.z <= 66)
+            if (m_MoveVelocity.z <= 0.0001 && enemy.transform.position.z <= 66)
             {
                 break;
             }
-            // Wait for each frame to move again - This will enable the movements to be smooth, since this is a while loop
+            // Wait for each frame to move again - This will enable the movements to be smooth
             yield return new WaitForEndOfFrame();
         }
         // End the coroutine
         yield return null;
+    }
+
+    // Disable the formation gameobjects
+    void DisableForm(GameObject[] form)
+    {
+        for (int i = 0; i < form.Length; i++)
+        {
+            form[i].SetActive(false);
+        }
+    }
+
+    // Enable the formation gameobjects
+    void EnableForm(GameObject[] form)
+    {
+        for (int i = 0; i < form.Length; i++)
+        {
+            form[i].SetActive(true);
+        }
     }
 }

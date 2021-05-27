@@ -19,15 +19,29 @@ public class EnemyShooting : MonoBehaviour
     public float superFireRate;
     private float nextFire;
 
+    private bool readyToShoot = false;
+
     private void Awake()
     {
         player = GameObject.Find("PlayerMesh");
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if((tag == "Caster" && other.CompareTag("CasterSpawn")) || (tag == "Siege" && other.tag == "SiegeSpawn") || (tag == "Super" && other.tag == "SuperSpawn"))
+        {
+            readyToShoot = true;
+        }
+        else
+        {
+            readyToShoot = false;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if(player != null)
+        if(player != null && readyToShoot == true)
         {
             switch (enemy.tag)
             {

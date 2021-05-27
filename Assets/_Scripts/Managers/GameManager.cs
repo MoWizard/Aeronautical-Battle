@@ -35,18 +35,6 @@ public class GameManager : MonoBehaviour
 
     public float GameTime { get { return m_gameTime; } }
 
-    // Reference Enemy Types
-    public GameObject m_Caster;
-    public GameObject m_Siege;
-    public GameObject m_Super;
-
-    /* Put each formation into an array
-    public GameObject[] FirstForm;
-    public GameObject[] SecondForm;
-    public GameObject[] ThirdForm;
-    public GameObject[] FourthForm;
-    public GameObject[] FifthForm;*/
-
     // Reference all the enemies in the scene
     public GameObject[] m_CasterArray;
     public GameObject[] m_SiegeArray;
@@ -204,17 +192,8 @@ public class GameManager : MonoBehaviour
     }
 
     // Create timers for when each stage will go by
-    /*
-    WHAT TO CHANGE:
-     - Instead of set times, use relative times (nextStageTimer -= Time.time)
-     - Once timer is up, don't spawn anymore enemies
-     - Change game stage and set timer
-     - Repeat
-     */
     public void NextStage()
     {
-        Debug.Log(m_nextStageTimer);
-
         // Change the stages according to the time and the enemies alive
         switch (m_GameStage)
         {
@@ -229,11 +208,12 @@ public class GameManager : MonoBehaviour
                 if (m_nextStageTimer <= 0)
                 {
                     ChangingStage = true;
-                    if (m_EnemyManager.EnemiesAlive == false)
+                    if (m_EnemyManager.m_enemiesAlive == false)
                     {
                         m_GameStage = GameStage.SecondStage;
                         m_nextStageTimer = 40f;
                         ChangingStage = false;
+                        m_EnemyManager.m_FirstSuper = true;
                     }
                 }
                 break;
@@ -249,11 +229,12 @@ public class GameManager : MonoBehaviour
                 if (m_nextStageTimer <= 0)
                 {
                     ChangingStage = true;
-                    if (m_EnemyManager.EnemiesAlive == false)
+                    if (m_EnemyManager.m_enemiesAlive == false)
                     {
                         m_GameStage = GameStage.ThirdStage;
                         m_nextStageTimer = 60f;
                         ChangingStage = false;
+                        m_EnemyManager.m_FirstSuper = true;
                     }
                 }
                 break;
@@ -269,11 +250,12 @@ public class GameManager : MonoBehaviour
                 if (m_nextStageTimer <= 0)
                 {
                     ChangingStage = true;
-                    if (m_EnemyManager.EnemiesAlive == false)
+                    if (m_EnemyManager.m_enemiesAlive == false)
                     {
                         m_GameStage = GameStage.FourthStage;
                         m_nextStageTimer = 30f;
                         ChangingStage = false;
+                        m_EnemyManager.m_FirstSuper = true;
                     }
                 }
                 break;
@@ -289,11 +271,12 @@ public class GameManager : MonoBehaviour
                 if (m_nextStageTimer <= 0)
                 {
                     ChangingStage = true;
-                    if (m_EnemyManager.EnemiesAlive == false)
+                    if (m_EnemyManager.m_enemiesAlive == false)
                     {
                         m_GameStage = GameStage.Fifthstage;
                         m_nextStageTimer = 120f;
                         ChangingStage = false;
+                        m_EnemyManager.m_FirstSuper = true;
                     }
                 }
                 break;
@@ -309,7 +292,7 @@ public class GameManager : MonoBehaviour
                 if (m_nextStageTimer <= 0)
                 {
                     ChangingStage = true;
-                    if (m_EnemyManager.EnemiesAlive == false)
+                    if (m_EnemyManager.m_enemiesAlive == false)
                     {
                         m_GameState = GameState.GameOver;
                     }

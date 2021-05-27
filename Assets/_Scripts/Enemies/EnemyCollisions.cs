@@ -56,7 +56,7 @@ public class EnemyCollisions : MonoBehaviour
             enemyOnSpawn = other.gameObject;
             isOccupied = true;
         }
-        else if (other.tag == "Bullet" || other.tag == "Player" || other.tag == "FuelUp" || other.tag == "CasterSpawn" || other.tag == "SiegeSpawn" || other.tag == "SuperSpawn")
+        else if (other.tag == "Bullet" || other.tag == "Player" || other.tag == "FuelUp" || other.tag == "CasterSpawn" || other.tag == "SiegeSpawn" || other.tag == "SuperSpawn" || other.tag == "Homing")
         {
             return;
         }
