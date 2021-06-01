@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5558625557241427955}
   - component: {fileID: -7399536108557918287}
   - component: {fileID: 4128799099562493882}
+  - component: {fileID: 2440522356128490288}
   m_Layer: 0
   m_Name: SiegeEnemy
   m_TagString: Siege
@@ -109,8 +110,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 318a3bc59075f4b4fab25ec8f8671381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 1708529143345895411}
   explosion: {fileID: 1545263287284428218, guid: b9b9f43ad2fa4e048b0cd02eb976bf6d, type: 3}
   SiegeHP: 5
+--- !u!114 &2440522356128490288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708529143345895411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec4d8d20705a2af4bb18920c5d52c58a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Immune: 0
 --- !u!1 &8857548983017544909
 GameObject:
   m_ObjectHideFlags: 0

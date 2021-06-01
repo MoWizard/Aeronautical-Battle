@@ -1,0 +1,37 @@
+Reference GameManager
+
+Create Formation 1, 2, 3, 4 and 5 Arrays. These will contain the transform locations for the enemy spawners
+
+
+void function CheckIfEnemiesAreAlive(Formation)
+	Create variable enemies left and set it to the formation length
+	For every spawner in the formation:
+		Check if there is an enemy occupying it
+			If not, reduce enemies left
+	If there are no enemies left, return false
+	If there are enemies left, return true
+
+
+void function ChangeForm()
+	Check the game stage:
+		// Uses both DisableForm() and EnableForm() with the specified formation number
+		For the first stage, spawn the enemies in the first formation
+		For the second stage, spawn the enemies in the second formation
+		For the third stage, spawn the enemies in the third formation
+		For the fourth stage, spawn the enemies in the fourth formation
+		For the fifth stage, spawn the enemies in the fifth formation
+
+
+void function SpawnEnemy(Formation)
+	Check the spawnpoint the enemy should spawn on
+	Spawn the enemy off the screen
+	Move the enemy towards the spawn point
+
+
+void function DisableForm(Formation)
+	Disables all the spawners in the formation
+
+
+void function EnableForm(Formation)
+	Enables all the spawners in the formation
+	

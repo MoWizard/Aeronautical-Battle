@@ -17,14 +17,14 @@ public class EnemyManager : MonoBehaviour
     private Vector3 m_MoveVelocity;
     public bool m_FirstSuper = true;
 
-    private bool EnemiesAlive(GameObject[] form, GameObject spawner)
+    private bool EnemiesAlive(GameObject[] form)
     {
         int enemiesLeft = form.Length;
 
         for (int i = 0; i < form.Length; i++)
         {
             // Check how many enemies are left
-            if (spawner.GetComponent<EnemyCollisions>().isOccupied == false)
+            if (form[i].GetComponent<EnemySpawnerCollisions>().isOccupied == false)
             {
                 enemiesLeft--;
             }
@@ -47,10 +47,9 @@ public class EnemyManager : MonoBehaviour
         m_GameManager = GetComponent<GameManager>();
     }
 
-    /* Change the formation type each stage
-     * Firstly it enables the form that is required and disables the rest.
-     * It then spawns in the enemies for that specific form.
-    */
+    /* Change the formation type each stage                                *
+     * Firstly it enables the form that is required and disables the rest. *
+     * It then spawns in the enemies for that specific form.               */
     public void ChangeForms()
     {
         switch (m_GameManager.Stage)
@@ -108,23 +107,26 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (GameObject g in formationNumber)
         {
-            if (g.GetComponent<EnemyCollisions>().isOccupied == false && m_GameManager.ChangingStage == false)
+            if (g.GetComponent<EnemySpawnerCollisions>().isOccupied == false && m_GameManager.ChangingStage == false)
             {
                 // Create a new enemy 20 units in the z direction away from the spawn location.
-                GameObject newEnemy = Instantiate(g.GetComponent<EnemyCollisions>().enemyType, new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z + 20f), new Quaternion(0f, 180f, 0f, 0f));
+                GameObject newEnemy = Instantiate(g.GetComponent<EnemySpawnerCollisions>().enemyType, new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z + 20f), new Quaternion(0f, 180f, 0f, 0f));
 
                 // Make new enemy the enemy on spawn
-                g.GetComponent<EnemyCollisions>().enemyOnSpawn = newEnemy;
+                g.GetComponent<EnemySpawnerCollisions>().enemyOnSpawn = newEnemy;
+
+                // Set the immunity status of the enemy
+                newEnemy.GetComponent<EnemyImmunity>().Immune = true;
 
                 // Move the enemy to the position of the spawnpoint
                 StartCoroutine(MoveEnemyForward(newEnemy, g));
 
                 // Change the script bool to true
-                g.GetComponent<EnemyCollisions>().isOccupied = true;
+                g.GetComponent<EnemySpawnerCollisions>().isOccupied = true;
             }
             else
             {
-                if(EnemiesAlive(formationNumber, g) == false)
+                if (EnemiesAlive(formationNumber) == false)
                 {
                     m_enemiesAlive = false;
                 }
@@ -149,19 +151,18 @@ public class EnemyManager : MonoBehaviour
             m_FirstSuper = false;
         }
 
-        while (!Mathf.Approximately(enemy.transform.position.z, spawner.transform.position.z))
+        // While the enemy is not on the spawner, move it to the spawner
+        while (!(m_MoveVelocity.z <= 0.001 && enemy.transform.position.z <= 66))
         {
             // Slowly move the enemy towards the spawn location
             enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, spawner.transform.position, ref m_MoveVelocity, Time.deltaTime * 100f);
 
-            // Check if the enemy is really close to the spawner
-            if (m_MoveVelocity.z <= 0.0001 && enemy.transform.position.z <= 66)
-            {
-                break;
-            }
             // Wait for each frame to move again - This will enable the movements to be smooth
             yield return new WaitForEndOfFrame();
         }
+
+        enemy.GetComponent<EnemyImmunity>().Immune = false;
+
         // End the coroutine
         yield return null;
     }

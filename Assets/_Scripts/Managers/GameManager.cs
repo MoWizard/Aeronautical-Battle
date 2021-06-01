@@ -10,8 +10,15 @@ public class GameManager : MonoBehaviour
     private EnemyManager m_EnemyManager;
 
     // Reference the overlay text to display some cool text
+    // Main Menu
     public TextMeshProUGUI m_TitleText;
+
+    // HUD
+    public TextMeshProUGUI m_StageTitleText;
     public TextMeshProUGUI m_StageMessageText;
+
+    // Game Over
+    public TextMeshProUGUI m_StageReachedText;
 
     // Reference the buttons in order to do button-y things
     public Button m_StartButton;
@@ -36,9 +43,9 @@ public class GameManager : MonoBehaviour
     public float GameTime { get { return m_gameTime; } }
 
     // Reference all the enemies in the scene
-    public GameObject[] m_CasterArray;
-    public GameObject[] m_SiegeArray;
-    public GameObject[] m_SuperArray;
+    private GameObject[] m_CasterArray;
+    private GameObject[] m_SiegeArray;
+    private GameObject[] m_SuperArray;
 
     // Assigning names to integers though enumerations. StartScreen = 0, SplashScreen = 1, Start = 2, Playing = 3 and GameOver = 4
     public enum GameState
@@ -70,10 +77,6 @@ public class GameManager : MonoBehaviour
 
     public bool ChangingStage = false;
 
-    // Create the smoothdamp effect
-    private Vector3 m_MoveVelocity;
-    private float m_DampTime = 0.5f;
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -88,23 +91,46 @@ public class GameManager : MonoBehaviour
 
     public void OnNewGame()
     {
-        // Set the Game State to Start and the text to nothing
+        // Set the Game State to ReadyTransition
         m_GameState = GameState.ReadyTransition;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Place all the enemies into their arrays
+        m_CasterArray = GameObject.FindGameObjectsWithTag("Caster");
+        m_SiegeArray = GameObject.FindGameObjectsWithTag("Siege");
+        m_SuperArray = GameObject.FindGameObjectsWithTag("Super");
+
+        // Change what is being done according to the state of the game
         switch (m_GameState)
         {
             case GameState.StartScreen:
                 m_HUD.gameObject.SetActive(false);
                 m_MainMenuPanel.gameObject.SetActive(true);
                 m_GameOverPanel.gameObject.SetActive(false);
+
+                // Remove any enemies from view
+                if (m_CasterArray != null || m_SiegeArray != null || m_SuperArray != null)
+                {
+                    for(int i = 0; i < m_CasterArray.Length; i++)
+                    {
+                        m_CasterArray[i].SetActive(false);
+                    }
+                    for (int i = 0; i < m_SiegeArray.Length; i++)
+                    {
+                        m_SiegeArray[i].SetActive(false);
+                    }
+                    for (int i = 0; i < m_SuperArray.Length; i++)
+                    {
+                        m_SuperArray[i].SetActive(false);
+                    }
+                }
                 break;
 
             case GameState.MenuScreen:
-
+                // Can add extra menus here if needed
                 break;
 
             case GameState.ReadyTransition:
@@ -135,6 +161,9 @@ public class GameManager : MonoBehaviour
                 m_MainMenuPanel.gameObject.SetActive(false);
                 m_GameOverPanel.gameObject.SetActive(false);
 
+                // Change the stage number accordingly
+                m_StageTitleText.text = "Stage " + ((int)m_GameStage + 1);
+
                 // Reduce the players fuel
                 if (m_PlayerFuel.reduceFuel == false)
                 {
@@ -144,6 +173,7 @@ public class GameManager : MonoBehaviour
                 if (m_player.activeSelf != true)
                 {
                     m_GameState = GameState.GameOver;
+                    m_PlayerFuel.reduceFuel = false;
                 }
                 else
                 {
@@ -159,8 +189,7 @@ public class GameManager : MonoBehaviour
                 m_GameOverPanel.gameObject.SetActive(true);
 
                 // Write the game over message
-                m_StageMessageText.text = "Game Over";
-                m_StageMessageText.transform.position = Vector3.SmoothDamp(transform.position, m_TitleText.transform.position, ref m_MoveVelocity, Time.deltaTime * m_DampTime);
+                m_StageReachedText.text = "Stage Reached: " + ((int)m_GameStage + 1) + "/5";
                 break;
         }
 
@@ -186,9 +215,7 @@ public class GameManager : MonoBehaviour
 
     public void OnMainMenuButton()
     {
-        m_HUD.gameObject.SetActive(false);
-        m_MainMenuPanel.gameObject.SetActive(true);
-        m_GameOverPanel.gameObject.SetActive(false);
+        m_GameState = GameState.StartScreen;
     }
 
     // Create timers for when each stage will go by

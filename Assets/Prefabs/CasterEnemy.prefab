@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7550532265488365435}
   - component: {fileID: 5406744431735925207}
   - component: {fileID: -1357287568405516373}
+  - component: {fileID: 4432832718288493728}
   m_Layer: 0
   m_Name: CasterEnemy
   m_TagString: Caster
@@ -111,6 +112,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec1dfc69cbd99d244ba8a9a7f38b2f87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4432832718288493728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406744431735925206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec4d8d20705a2af4bb18920c5d52c58a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Immune: 0
 --- !u!1 &7161908648909052932
 GameObject:
   m_ObjectHideFlags: 0

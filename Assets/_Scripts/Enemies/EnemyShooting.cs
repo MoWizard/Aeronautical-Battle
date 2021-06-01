@@ -23,12 +23,13 @@ public class EnemyShooting : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("PlayerMesh");
+        player = GameObject.Find("Player");
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if((tag == "Caster" && other.CompareTag("CasterSpawn")) || (tag == "Siege" && other.tag == "SiegeSpawn") || (tag == "Super" && other.tag == "SuperSpawn"))
+        // Check to see if the enemy is ready to shoot or not
+        if(((tag == "Caster" && other.CompareTag("CasterSpawn")) || (tag == "Siege" && other.tag == "SiegeSpawn") || (tag == "Super" && other.tag == "SuperSpawn")))
         {
             readyToShoot = true;
         }
@@ -41,7 +42,8 @@ public class EnemyShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player != null && readyToShoot == true)
+        // Check to see if the enemy should shoot or not
+        if(player.activeSelf == true && readyToShoot == true && enemy.GetComponent<EnemyImmunity>().Immune == false)
         {
             switch (enemy.tag)
             {

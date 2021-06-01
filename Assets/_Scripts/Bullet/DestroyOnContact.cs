@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DestroyOnContact : MonoBehaviour
 {
-    // Get the GameManager and Siege Health
-    GameManager m_GameManager;
+    // Get the Player
+    private GameObject player;
 
     // Retrieve audio
     //public AudioSource bulletExplosionAudio;
@@ -19,7 +19,7 @@ public class DestroyOnContact : MonoBehaviour
 
     void Awake()
     {
-        m_GameManager = FindObjectOfType<GameManager>();
+        player = GameObject.Find("Player");
     }
 
     private void Start()
@@ -36,33 +36,59 @@ public class DestroyOnContact : MonoBehaviour
                 // Create both explosions
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
                 Instantiate(explosion, other.transform.position, other.transform.rotation);
-                other.gameObject.SetActive(false);
+                player.gameObject.SetActive(false);
                 break;
 
             case "Siege":
-                // Create small explosion and decrease health
+                if (other.GetComponent<EnemyImmunity>().Immune == false)
+                {
+                    // Increase the fuel
+                    player.GetComponent<PlayerFuel>().IncreaseFuel(3);
+                }
+                // Create small explosion
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
-                // Most of this is in its own script
                 break;
 
             case "Caster":
+                if (other.GetComponent<EnemyImmunity>().Immune == false)
+                {
+                    // Increase the fuel
+                    player.GetComponent<PlayerFuel>().IncreaseFuel(5);
+                    
+                    // Blow the enemy up
+                    Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
+                    other.gameObject.SetActive(false);
+                }
+                // Create small explosion
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
-                Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
-                other.gameObject.SetActive(false);
                 break;
 
             case "Super":
+                if (other.GetComponent<EnemyImmunity>().Immune == false)
+                {
+                    // Increase the fuel
+                    player.GetComponent<PlayerFuel>().IncreaseFuel(15);
+
+                    // Blow the enemy up
+                    Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
+                    other.gameObject.SetActive(false);
+                }
+                // Create small explosion
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
-                Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
-                other.gameObject.SetActive(false);
                 break;
 
             case "Homing":
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+
+                // Increase the fuel
+                player.GetComponent<PlayerFuel>().IncreaseFuel(5);
                 break;
 
             case "Bullet":
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+
+                // Increase the fuel
+                player.GetComponent<PlayerFuel>().IncreaseFuel(1);
                 break;
 
             default:

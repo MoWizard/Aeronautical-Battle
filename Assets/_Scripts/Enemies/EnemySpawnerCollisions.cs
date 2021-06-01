@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyCollisions : MonoBehaviour
+public class EnemySpawnerCollisions : MonoBehaviour
 {
     // Reference Enemy Types
     public GameObject m_Caster;

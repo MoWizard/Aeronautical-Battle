@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SiegeHealth : MonoBehaviour
 {
+    // Reference itself
+    public GameObject enemy;
+
     // Retrieve the particle effects
     public GameObject explosion;
 
@@ -11,7 +14,7 @@ public class SiegeHealth : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Bullet")
+        if (other.gameObject.tag == "Bullet" && enemy.GetComponent<EnemyImmunity>().Immune == false)
         {
             if(SiegeHP <= 1)
             {
