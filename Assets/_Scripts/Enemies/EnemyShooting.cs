@@ -7,6 +7,9 @@ public class EnemyShooting : MonoBehaviour
     // Reference the enemy
     public GameObject enemy;
 
+    // Reference the Audio Manager
+    public AudioManager m_AudioManager;
+
     // Reference the bullet and homing bullet prefab and where the bullets spawn
     public GameObject bullet;
     public GameObject homingBullet;
@@ -24,6 +27,7 @@ public class EnemyShooting : MonoBehaviour
     private void Awake()
     {
         player = GameObject.Find("Player");
+        m_AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -53,6 +57,7 @@ public class EnemyShooting : MonoBehaviour
                         // Repeatedly fire bullets
                         nextFire = Time.time + superFireRate;
                         Instantiate(homingBullet, bulletSpawn.position, bulletSpawn.rotation);
+                        m_AudioManager.EnemyShootingAudio.Play();
                     }
                     break;
 
@@ -63,6 +68,7 @@ public class EnemyShooting : MonoBehaviour
                         // Repeatedly fire bullets
                         nextFire = Time.time + fireRate;
                         Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+                        m_AudioManager.EnemyShootingAudio.Play();
                     }
                     break;
             }

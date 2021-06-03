@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerShooting : MonoBehaviour
 {
     public GameManager m_GameManager;
+    public GameObject Player;
+
+    //public AudioSource
 
     // Reference the bullet prefab and where the bullets spawn
     public GameObject bullet;
@@ -25,6 +28,7 @@ public class PlayerShooting : MonoBehaviour
         {
             nextFire = Time.time + fireRate;
             Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+            m_GameManager.GetComponent<AudioManager>().PlayerShootingAudio.Play();
         }
     }
 }

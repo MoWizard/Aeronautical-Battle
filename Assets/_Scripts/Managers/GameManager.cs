@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     // Reference the player
     public GameObject m_player;
     private PlayerFuel m_PlayerFuel;
+    public Transform m_StartPosition;
 
     // Create Timers
     public float m_gameTime = 0;
@@ -93,6 +94,8 @@ public class GameManager : MonoBehaviour
     {
         // Set the Game State to ReadyTransition
         m_GameState = GameState.ReadyTransition;
+        RemoveEnemies();
+        m_player.SetActive(true);
     }
 
     // Update is called once per frame
@@ -112,21 +115,7 @@ public class GameManager : MonoBehaviour
                 m_GameOverPanel.gameObject.SetActive(false);
 
                 // Remove any enemies from view
-                if (m_CasterArray != null || m_SiegeArray != null || m_SuperArray != null)
-                {
-                    for(int i = 0; i < m_CasterArray.Length; i++)
-                    {
-                        m_CasterArray[i].SetActive(false);
-                    }
-                    for (int i = 0; i < m_SiegeArray.Length; i++)
-                    {
-                        m_SiegeArray[i].SetActive(false);
-                    }
-                    for (int i = 0; i < m_SuperArray.Length; i++)
-                    {
-                        m_SuperArray[i].SetActive(false);
-                    }
-                }
+                RemoveEnemies();
                 break;
 
             case GameState.MenuScreen:
@@ -137,6 +126,8 @@ public class GameManager : MonoBehaviour
                 m_HUD.gameObject.SetActive(true);
                 m_MainMenuPanel.gameObject.SetActive(false);
                 m_GameOverPanel.gameObject.SetActive(false);
+
+                m_player.transform.position = m_StartPosition.position;
 
                 m_startTimer -= Time.deltaTime;
 
@@ -167,13 +158,13 @@ public class GameManager : MonoBehaviour
                 // Reduce the players fuel
                 if (m_PlayerFuel.reduceFuel == false)
                 {
-                    StartCoroutine(m_PlayerFuel.DecreaseFuel());
                     m_PlayerFuel.reduceFuel = true;
                 }
                 if (m_player.activeSelf != true)
                 {
                     m_GameState = GameState.GameOver;
                     m_PlayerFuel.reduceFuel = false;
+                    m_PlayerFuel.IncreaseFuel(100);
                 }
                 else
                 {
@@ -217,6 +208,27 @@ public class GameManager : MonoBehaviour
     {
         m_GameState = GameState.StartScreen;
     }
+
+    // Remove enemies from view
+    public void RemoveEnemies()
+    {
+        if (m_CasterArray != null || m_SiegeArray != null || m_SuperArray != null)
+        {
+            for (int i = 0; i < m_CasterArray.Length; i++)
+            {
+                m_CasterArray[i].SetActive(false);
+            }
+            for (int i = 0; i < m_SiegeArray.Length; i++)
+            {
+                m_SiegeArray[i].SetActive(false);
+            }
+            for (int i = 0; i < m_SuperArray.Length; i++)
+            {
+                m_SuperArray[i].SetActive(false);
+            }
+        }
+    }
+
 
     // Create timers for when each stage will go by
     public void NextStage()

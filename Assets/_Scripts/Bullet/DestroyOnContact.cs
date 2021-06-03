@@ -7,10 +7,8 @@ public class DestroyOnContact : MonoBehaviour
     // Get the Player
     private GameObject player;
 
-    // Retrieve audio
-    //public AudioSource bulletExplosionAudio;
-    //public AudioSource smallExplosionAudio;
-    //public AudioSource explosionAudio;
+    // Reference the Game Manager
+    public AudioManager m_AudioManager;
 
     // Retrieve the particle effects
     public GameObject bulletExplosion;
@@ -20,6 +18,7 @@ public class DestroyOnContact : MonoBehaviour
     void Awake()
     {
         player = GameObject.Find("Player");
+        m_AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
     }
 
     private void Start()
@@ -36,6 +35,8 @@ public class DestroyOnContact : MonoBehaviour
                 // Create both explosions
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
                 Instantiate(explosion, other.transform.position, other.transform.rotation);
+                m_AudioManager.ExplosionAudio.Play();
+                
                 player.gameObject.SetActive(false);
                 break;
 
@@ -61,6 +62,7 @@ public class DestroyOnContact : MonoBehaviour
                 }
                 // Create small explosion
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+                m_AudioManager.SmallExplosionAudio.Play();
                 break;
 
             case "Super":
@@ -75,10 +77,12 @@ public class DestroyOnContact : MonoBehaviour
                 }
                 // Create small explosion
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+                m_AudioManager.SmallExplosionAudio.Play();
                 break;
 
             case "Homing":
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+                m_AudioManager.BulletExplosionAudio.Play();
 
                 // Increase the fuel
                 player.GetComponent<PlayerFuel>().IncreaseFuel(5);
@@ -86,6 +90,7 @@ public class DestroyOnContact : MonoBehaviour
 
             case "Bullet":
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
+                m_AudioManager.BulletExplosionAudio.Play();
 
                 // Increase the fuel
                 player.GetComponent<PlayerFuel>().IncreaseFuel(1);

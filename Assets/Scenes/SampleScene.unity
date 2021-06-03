@@ -5569,6 +5569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_GameManager: {fileID: 3879920930202492068}
+  Player: {fileID: 173386226}
   bullet: {fileID: 9053074423898080008, guid: 35d9392a91ec31c4a9d4f63a00cf8432, type: 3}
   bulletSpawn: {fileID: 1835210037}
   fireRate: 0.5
@@ -8429,6 +8430,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1607449364}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1621608389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1621608390}
+  m_Layer: 0
+  m_Name: StartPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1621608390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621608389}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 20, z: 23.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1663344099
 GameObject:
   m_ObjectHideFlags: 0
@@ -9679,6 +9710,7 @@ MonoBehaviour:
   m_MainMenuPanel: {fileID: 1995073578}
   m_GameOverPanel: {fileID: 1298732767}
   m_player: {fileID: 173386226}
+  m_StartPosition: {fileID: 1621608390}
   m_gameTime: 0
   ChangingStage: 0
 --- !u!4 &3879920930202492069
@@ -9706,6 +9738,7 @@ GameObject:
   - component: {fileID: 3879920930202492069}
   - component: {fileID: 3879920930202492068}
   - component: {fileID: 3879920930202492072}
+  - component: {fileID: 3879920930202492073}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -9745,6 +9778,28 @@ MonoBehaviour:
   - {fileID: 605418947}
   m_FirstSuper: 1
   m_enemiesAlive: 0
+--- !u!114 &3879920930202492073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3879920930202492071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71bd1b1049cd5aa4a8014572592e68c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExplosionAudio: {fileID: 0}
+  PlayerShootingAudio: {fileID: 0}
+  ExplosionClip: {fileID: 8300000, guid: 42a6d0531e62c774cb6921741631e347, type: 3}
+  PlayerShootingClip: {fileID: 8300000, guid: 86a24df250af5e643b0154936979a5a7, type: 3}
+  SmallExplosionAudio: {fileID: 0}
+  EnemyShootingAudio: {fileID: 0}
+  SmallExplosionClip: {fileID: 8300000, guid: f359f36c8f2507d4f86fc05876a495e4, type: 3}
+  EnemyShootingClip: {fileID: 8300000, guid: 0fa760472bebaa24a9a5422427946c89, type: 3}
+  BulletExplosionAudio: {fileID: 0}
+  BulletExplosionClip: {fileID: 8300000, guid: 51ef092fd67c40f44ad763b62b44c1e1, type: 3}
 --- !u!64 &4469749715347887864
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SiegeHealth : MonoBehaviour
 {
+    // Reference Game Manager
+    public GameManager m_GameManager;
+
     // Reference itself
     public GameObject enemy;
 
@@ -20,6 +23,7 @@ public class SiegeHealth : MonoBehaviour
             {
                 // Explode the Siege Enemy
                 Instantiate(explosion, transform.position, transform.rotation);
+                m_GameManager.GetComponent<AudioManager>().ExplosionAudio.Play();
                 gameObject.SetActive(false);
             }
             else

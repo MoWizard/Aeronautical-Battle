@@ -161,6 +161,7 @@ public class EnemyManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        // Allow the enemy to be hit again
         enemy.GetComponent<EnemyImmunity>().Immune = false;
 
         // End the coroutine

@@ -19,7 +19,7 @@ public class PlayerFuel : MonoBehaviour
     public Image m_FuelBar;
 
     // Create variables needed to display and count the fuel
-    private float m_Fuel = 36;
+    private float m_Fuel = 102;
     public bool reduceFuel = false;
 
     void Awake()
@@ -59,7 +59,7 @@ public class PlayerFuel : MonoBehaviour
 
     public IEnumerator DecreaseFuel()
     {
-        while (true)
+        while (reduceFuel == true)
         {
             m_Fuel -= 2;
             m_FuelBar.fillAmount = m_Fuel / 100;
@@ -75,7 +75,7 @@ public class PlayerFuel : MonoBehaviour
         }
         else
         {
-            m_Fuel = 100;
+            m_Fuel = 102;
         }
         m_FuelBar.fillAmount = m_Fuel / 100;
     }
