@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
     // Reference the player
     public GameObject m_player;
     private PlayerFuel m_PlayerFuel;
-    public Transform m_StartPosition;
 
     // Create Timers
     public float m_gameTime = 0;
@@ -93,9 +92,9 @@ public class GameManager : MonoBehaviour
     public void OnNewGame()
     {
         // Set the Game State to ReadyTransition
-        m_GameState = GameState.ReadyTransition;
-        RemoveEnemies();
         m_player.SetActive(true);
+        RemoveEnemies();
+        m_GameState = GameState.ReadyTransition;
     }
 
     // Update is called once per frame
@@ -126,8 +125,6 @@ public class GameManager : MonoBehaviour
                 m_HUD.gameObject.SetActive(true);
                 m_MainMenuPanel.gameObject.SetActive(false);
                 m_GameOverPanel.gameObject.SetActive(false);
-
-                m_player.transform.position = m_StartPosition.position;
 
                 m_startTimer -= Time.deltaTime;
 

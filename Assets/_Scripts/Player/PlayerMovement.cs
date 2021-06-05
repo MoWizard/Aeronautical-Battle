@@ -15,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     public float m_Speed = 15f;
     public float m_TurnSpeed = 0.5f;
 
+    // Start Position
+    public Transform m_StartPosition;
+
     // Create a target for the rotation
     public float m_RotationTarget = 40f;
 
@@ -27,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private float m_VerticalInputMovement;
     private float m_HorizontalInputMovement;
 
-    // Still don't understand this part, but it works so ¯\_(u_u)_/¯
+    // I need this but i don't need this
     private float m_ReferenceThing;
 
     private void Awake()
@@ -54,6 +57,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Move();
             Turn();
+        }
+        else
+        {
+            transform.position = m_StartPosition.position;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 

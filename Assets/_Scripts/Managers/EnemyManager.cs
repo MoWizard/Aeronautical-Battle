@@ -152,10 +152,10 @@ public class EnemyManager : MonoBehaviour
         }
 
         // While the enemy is not on the spawner, move it to the spawner
-        while (!(m_MoveVelocity.z <= 0.001 && enemy.transform.position.z <= 66))
+        while (!(m_MoveVelocity.z <= 0.01 && enemy.transform.position.z <= 66))
         {
             // Slowly move the enemy towards the spawn location
-            enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, spawner.transform.position, ref m_MoveVelocity, Time.deltaTime * 100f);
+            enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, spawner.transform.position, ref m_MoveVelocity, Time.deltaTime * 50f);
 
             // Wait for each frame to move again - This will enable the movements to be smooth
             yield return new WaitForEndOfFrame();
