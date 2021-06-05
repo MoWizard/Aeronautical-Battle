@@ -5,9 +5,6 @@ using UnityEngine;
 public class PlayerShooting : MonoBehaviour
 {
     public GameManager m_GameManager;
-    public GameObject Player;
-
-    //public AudioSource
 
     // Reference the bullet prefab and where the bullets spawn
     public GameObject bullet;
@@ -24,7 +21,7 @@ public class PlayerShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time > nextFire && m_GameManager.State == GameManager.GameState.Playing && bulletSpawn.parent != null)
+        if ((Input.GetButton("Fire1") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire && m_GameManager.State == GameManager.GameState.Playing && bulletSpawn.parent != null)
         {
             nextFire = Time.time + fireRate;
             Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);

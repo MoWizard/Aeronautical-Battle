@@ -13,11 +13,15 @@ public class GameManager : MonoBehaviour
     // Main Menu
     public TextMeshProUGUI m_TitleText;
 
+    // Credits
+    public TextMeshProUGUI m_CreditsText;
+
     // HUD
     public TextMeshProUGUI m_StageTitleText;
     public TextMeshProUGUI m_StageMessageText;
 
     // Game Over
+    public TextMeshProUGUI m_GameOverText;
     public TextMeshProUGUI m_StageReachedText;
 
     // Reference the buttons in order to do button-y things
@@ -46,6 +50,8 @@ public class GameManager : MonoBehaviour
     private GameObject[] m_CasterArray;
     private GameObject[] m_SiegeArray;
     private GameObject[] m_SuperArray;
+    private GameObject[] m_BulletArray;
+    private GameObject[] m_HomingArray;
 
     // Assigning names to integers though enumerations. StartScreen = 0, SplashScreen = 1, Start = 2, Playing = 3 and GameOver = 4
     public enum GameState
@@ -87,23 +93,40 @@ public class GameManager : MonoBehaviour
         m_HUD.gameObject.SetActive(false);
         m_MainMenuPanel.gameObject.SetActive(true);
         m_GameOverPanel.gameObject.SetActive(false);
+        m_CreditsText.gameObject.SetActive(false);
     }
 
+    // Starts a new game
     public void OnNewGame()
     {
-        // Set the Game State to ReadyTransition
-        m_player.SetActive(true);
+        // Set player to active and removes enemies
         RemoveEnemies();
+        m_player.SetActive(true);
+
+        // Set the Game State to ReadyTransition
         m_GameState = GameState.ReadyTransition;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Secret developer tool
+        if (Input.GetKeyDown(KeyCode.F8))
+        {
+            RemoveEnemies();
+            m_GameStage = GameStage.Fifthstage;
+            m_nextStageTimer = 80f;
+            ChangingStage = false;
+            m_EnemyManager.m_FirstSuper = true;
+        }
+
+
         // Place all the enemies into their arrays
         m_CasterArray = GameObject.FindGameObjectsWithTag("Caster");
         m_SiegeArray = GameObject.FindGameObjectsWithTag("Siege");
         m_SuperArray = GameObject.FindGameObjectsWithTag("Super");
+        m_BulletArray = GameObject.FindGameObjectsWithTag("Bullet");
+        m_HomingArray = GameObject.FindGameObjectsWithTag("Homing");
 
         // Change what is being done according to the state of the game
         switch (m_GameState)
@@ -113,8 +136,9 @@ public class GameManager : MonoBehaviour
                 m_MainMenuPanel.gameObject.SetActive(true);
                 m_GameOverPanel.gameObject.SetActive(false);
 
-                // Remove any enemies from view
+                // Remove any enemies from view and brings the player back
                 RemoveEnemies();
+                m_player.SetActive(true);
                 break;
 
             case GameState.MenuScreen:
@@ -125,6 +149,7 @@ public class GameManager : MonoBehaviour
                 m_HUD.gameObject.SetActive(true);
                 m_MainMenuPanel.gameObject.SetActive(false);
                 m_GameOverPanel.gameObject.SetActive(false);
+                m_CreditsText.gameObject.SetActive(false);
 
                 m_startTimer -= Time.deltaTime;
 
@@ -137,9 +162,17 @@ public class GameManager : MonoBehaviour
                     m_gameTime = 0;
                     m_startTimer = 3;
                     m_StageMessageText.text = "";
+
+                    // Change the states of the game
                     m_GameState = GameState.Playing;
                     m_GameStage = GameStage.FirstStage;
+
+                    // Set the first stage to 20 seconds
                     m_nextStageTimer = 20f;
+
+                    // Reduce the players fuel
+                    m_PlayerFuel.reduceFuel = true;
+                    StartCoroutine(m_PlayerFuel.DecreaseFuel());
                 }
                 break;
 
@@ -148,26 +181,23 @@ public class GameManager : MonoBehaviour
                 m_HUD.gameObject.SetActive(true);
                 m_MainMenuPanel.gameObject.SetActive(false);
                 m_GameOverPanel.gameObject.SetActive(false);
+                m_CreditsText.gameObject.SetActive(false);
 
                 // Change the stage number accordingly
                 m_StageTitleText.text = "Stage " + ((int)m_GameStage + 1);
-
-                // Reduce the players fuel
-                if (m_PlayerFuel.reduceFuel == false)
+                if (m_player.activeSelf == false)
                 {
-                    m_PlayerFuel.reduceFuel = true;
-                }
-                if (m_player.activeSelf != true)
-                {
+                    m_GameOverText.text = "Game Over";
                     m_GameState = GameState.GameOver;
                     m_PlayerFuel.reduceFuel = false;
+                    StopCoroutine(m_PlayerFuel.DecreaseFuel());
                     m_PlayerFuel.IncreaseFuel(100);
                 }
                 else
                 {
                     m_gameTime += Time.deltaTime;
-                    NextStage();
-                    m_EnemyManager.ChangeForms();
+                    CheckStage();
+                    m_EnemyManager.CheckForms();
                 }
                 break;
 
@@ -196,39 +226,52 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Quit the game
     public void OnQuitGame()
     {
         Application.Quit();
     }
 
+    // Go to start screen when the Main Menu button is pressed
     public void OnMainMenuButton()
     {
         m_GameState = GameState.StartScreen;
     }
 
-    // Remove enemies from view
+    // Open the credits
+    public void OnCreditsButton()
+    {
+        m_CreditsText.gameObject.SetActive(true);
+    }
+
+    // Deletes all the enemies on screen when a new game is starting
     public void RemoveEnemies()
     {
-        if (m_CasterArray != null || m_SiegeArray != null || m_SuperArray != null)
+        foreach(GameObject i in m_CasterArray)
         {
-            for (int i = 0; i < m_CasterArray.Length; i++)
-            {
-                m_CasterArray[i].SetActive(false);
-            }
-            for (int i = 0; i < m_SiegeArray.Length; i++)
-            {
-                m_SiegeArray[i].SetActive(false);
-            }
-            for (int i = 0; i < m_SuperArray.Length; i++)
-            {
-                m_SuperArray[i].SetActive(false);
-            }
+            Destroy(i);
+        }
+        foreach (GameObject i in m_SiegeArray)
+        {
+            Destroy(i);
+        }
+        foreach (GameObject i in m_SuperArray)
+        {
+            Destroy(i);
+        }
+        foreach (GameObject i in m_BulletArray)
+        {
+            Destroy(i);
+        }
+        foreach (GameObject i in m_HomingArray)
+        {
+            Destroy(i);
         }
     }
 
 
     // Create timers for when each stage will go by
-    public void NextStage()
+    public void CheckStage()
     {
         // Change the stages according to the time and the enemies alive
         switch (m_GameStage)
@@ -310,7 +353,7 @@ public class GameManager : MonoBehaviour
                     if (m_EnemyManager.m_enemiesAlive == false)
                     {
                         m_GameStage = GameStage.Fifthstage;
-                        m_nextStageTimer = 120f;
+                        m_nextStageTimer = 80f;
                         ChangingStage = false;
                         m_EnemyManager.m_FirstSuper = true;
                     }
@@ -330,6 +373,7 @@ public class GameManager : MonoBehaviour
                     ChangingStage = true;
                     if (m_EnemyManager.m_enemiesAlive == false)
                     {
+                        m_GameOverText.text = "You Win";
                         m_GameState = GameState.GameOver;
                     }
                 }

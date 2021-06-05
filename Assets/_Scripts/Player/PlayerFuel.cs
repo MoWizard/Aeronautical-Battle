@@ -61,13 +61,14 @@ public class PlayerFuel : MonoBehaviour
     {
         while (reduceFuel == true)
         {
-            m_Fuel -= 2;
+            m_Fuel -= 4;
             m_FuelBar.fillAmount = m_Fuel / 100;
+            Debug.Log(m_Fuel);
             yield return new WaitForSeconds(1.25f);
         }
     }
 
-    public void IncreaseFuel(int amount)
+    public void IncreaseFuel(float amount)
     {
         if (m_Fuel + amount <= 100)
         {
@@ -75,7 +76,7 @@ public class PlayerFuel : MonoBehaviour
         }
         else
         {
-            m_Fuel = 102;
+            m_Fuel = 100;
         }
         m_FuelBar.fillAmount = m_Fuel / 100;
     }

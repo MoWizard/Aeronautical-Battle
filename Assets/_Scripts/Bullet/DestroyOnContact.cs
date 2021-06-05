@@ -5,7 +5,7 @@ using UnityEngine;
 public class DestroyOnContact : MonoBehaviour
 {
     // Get the Player
-    private GameObject player;
+    private GameObject m_player;
 
     // Reference the Game Manager
     public AudioManager m_AudioManager;
@@ -17,7 +17,7 @@ public class DestroyOnContact : MonoBehaviour
 
     void Awake()
     {
-        player = GameObject.Find("Player");
+        m_player = GameObject.Find("Player");
         m_AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
     }
 
@@ -37,15 +37,10 @@ public class DestroyOnContact : MonoBehaviour
                 Instantiate(explosion, other.transform.position, other.transform.rotation);
                 m_AudioManager.ExplosionAudio.Play();
                 
-                player.gameObject.SetActive(false);
+                m_player.gameObject.SetActive(false);
                 break;
 
             case "Siege":
-                if (other.GetComponent<EnemyImmunity>().Immune == false)
-                {
-                    // Increase the fuel
-                    player.GetComponent<PlayerFuel>().IncreaseFuel(3);
-                }
                 // Create small explosion
                 Instantiate(bulletExplosion, transform.position, transform.rotation);
                 break;
@@ -54,7 +49,7 @@ public class DestroyOnContact : MonoBehaviour
                 if (other.GetComponent<EnemyImmunity>().Immune == false)
                 {
                     // Increase the fuel
-                    player.GetComponent<PlayerFuel>().IncreaseFuel(5);
+                    m_player.GetComponent<PlayerFuel>().IncreaseFuel(6f);
                     
                     // Blow the enemy up
                     Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
@@ -69,7 +64,7 @@ public class DestroyOnContact : MonoBehaviour
                 if (other.GetComponent<EnemyImmunity>().Immune == false)
                 {
                     // Increase the fuel
-                    player.GetComponent<PlayerFuel>().IncreaseFuel(15);
+                    m_player.GetComponent<PlayerFuel>().IncreaseFuel(18f);
 
                     // Blow the enemy up
                     Instantiate(smallExplosion, other.transform.position, other.transform.rotation);
@@ -85,7 +80,7 @@ public class DestroyOnContact : MonoBehaviour
                 m_AudioManager.BulletExplosionAudio.Play();
 
                 // Increase the fuel
-                player.GetComponent<PlayerFuel>().IncreaseFuel(5);
+                m_player.GetComponent<PlayerFuel>().IncreaseFuel(0.25f);
                 break;
 
             case "Bullet":
@@ -93,7 +88,7 @@ public class DestroyOnContact : MonoBehaviour
                 m_AudioManager.BulletExplosionAudio.Play();
 
                 // Increase the fuel
-                player.GetComponent<PlayerFuel>().IncreaseFuel(1);
+                m_player.GetComponent<PlayerFuel>().IncreaseFuel(0.25f);
                 break;
 
             default:
