@@ -8,7 +8,7 @@ public class DestroyOnContact : MonoBehaviour
     private GameObject m_player;
 
     // Reference the Game Manager
-    public AudioManager m_AudioManager;
+    private AudioManager m_AudioManager;
 
     // Retrieve the particle effects
     public GameObject bulletExplosion;

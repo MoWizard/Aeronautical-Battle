@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI m_TitleText;
 
     // Credits
-    public TextMeshProUGUI m_CreditsText;
+    public Button m_BackButton;
 
     // HUD
     public TextMeshProUGUI m_StageTitleText;
@@ -24,16 +24,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI m_GameOverText;
     public TextMeshProUGUI m_StageReachedText;
 
-    // Reference the buttons in order to do button-y things
-    public Button m_StartButton;
-    public Button m_QuitButton;
-    public Button m_TryAgainButton;
-    public Button m_MainMenuButton;
-
     // Reference the Panels
     public GameObject m_HUD;
     public GameObject m_MainMenuPanel;
     public GameObject m_GameOverPanel;
+    public GameObject m_PausePanel;
+    public GameObject m_CreditsPanel;
 
     // Reference the player
     public GameObject m_player;
@@ -43,6 +39,10 @@ public class GameManager : MonoBehaviour
     public float m_gameTime = 0;
     private float m_startTimer = 3;
     private float m_nextStageTimer = 0;
+
+    // Toggle pause
+    private bool PauseToggle = false;
+
 
     public float GameTime { get { return m_gameTime; } }
 
@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
         MenuScreen,
         ReadyTransition,
         Playing,
+        Paused,
         GameOver
     };
 
@@ -74,7 +75,8 @@ public class GameManager : MonoBehaviour
         SecondStage,
         ThirdStage,
         FourthStage,
-        Fifthstage
+        Fifthstage,
+        Win
     };
 
     // Add ways to reference the Game State across scripts
@@ -90,15 +92,25 @@ public class GameManager : MonoBehaviour
 
         m_PlayerFuel = m_player.GetComponent<PlayerFuel>();
 
-        m_HUD.gameObject.SetActive(false);
-        m_MainMenuPanel.gameObject.SetActive(true);
-        m_GameOverPanel.gameObject.SetActive(false);
-        m_CreditsText.gameObject.SetActive(false);
+        m_HUD.SetActive(false);
+        m_MainMenuPanel.SetActive(true);
+        m_GameOverPanel.SetActive(false);
+        m_CreditsPanel.SetActive(false);
+        m_PausePanel.SetActive(false);
     }
 
     // Starts a new game
     public void OnNewGame()
     {
+        // Make sure the game isn't paused and fix it if it is
+        m_PausePanel.SetActive(false);
+        Time.timeScale = 1;
+        PauseToggle = false;
+        PauseToggle = false;
+        m_PlayerFuel.reduceFuel = false;
+        StopCoroutine(m_PlayerFuel.DecreaseFuel());
+        m_PlayerFuel.IncreaseFuel(100);
+
         // Set player to active and removes enemies
         RemoveEnemies();
         m_player.SetActive(true);
@@ -120,6 +132,11 @@ public class GameManager : MonoBehaviour
             m_EnemyManager.m_FirstSuper = true;
         }
 
+        if (m_GameState == GameState.Playing && Input.GetKeyDown(KeyCode.Tab) && PauseToggle == false)
+        {
+            OnPauseGame();
+        }
+
 
         // Place all the enemies into their arrays
         m_CasterArray = GameObject.FindGameObjectsWithTag("Caster");
@@ -132,9 +149,9 @@ public class GameManager : MonoBehaviour
         switch (m_GameState)
         {
             case GameState.StartScreen:
-                m_HUD.gameObject.SetActive(false);
-                m_MainMenuPanel.gameObject.SetActive(true);
-                m_GameOverPanel.gameObject.SetActive(false);
+                m_HUD.SetActive(false);
+                m_MainMenuPanel.SetActive(true);
+                m_GameOverPanel.SetActive(false);
 
                 // Remove any enemies from view and brings the player back
                 RemoveEnemies();
@@ -142,14 +159,13 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.MenuScreen:
-                // Can add extra menus here if needed
+
                 break;
 
             case GameState.ReadyTransition:
-                m_HUD.gameObject.SetActive(true);
-                m_MainMenuPanel.gameObject.SetActive(false);
-                m_GameOverPanel.gameObject.SetActive(false);
-                m_CreditsText.gameObject.SetActive(false);
+                m_HUD.SetActive(true);
+                m_MainMenuPanel.SetActive(false);
+                m_GameOverPanel.SetActive(false);
 
                 m_startTimer -= Time.deltaTime;
 
@@ -167,8 +183,9 @@ public class GameManager : MonoBehaviour
                     m_GameState = GameState.Playing;
                     m_GameStage = GameStage.FirstStage;
 
-                    // Set the first stage to 20 seconds
+                    // Set the first stage to 20 seconds and makes sure it's starting a new stage
                     m_nextStageTimer = 20f;
+                    ChangingStage = false;
 
                     // Reduce the players fuel
                     m_PlayerFuel.reduceFuel = true;
@@ -178,17 +195,19 @@ public class GameManager : MonoBehaviour
 
             case GameState.Playing:
                 // Choose the visual interface
-                m_HUD.gameObject.SetActive(true);
-                m_MainMenuPanel.gameObject.SetActive(false);
-                m_GameOverPanel.gameObject.SetActive(false);
-                m_CreditsText.gameObject.SetActive(false);
+                m_HUD.SetActive(true);
+                m_MainMenuPanel.SetActive(false);
+                m_GameOverPanel.SetActive(false);
 
                 // Change the stage number accordingly
                 m_StageTitleText.text = "Stage " + ((int)m_GameStage + 1);
                 if (m_player.activeSelf == false)
                 {
+                    // Sets everything for game over
                     m_GameOverText.text = "Game Over";
                     m_GameState = GameState.GameOver;
+
+                    // Resets the PlayerFuel script
                     m_PlayerFuel.reduceFuel = false;
                     StopCoroutine(m_PlayerFuel.DecreaseFuel());
                     m_PlayerFuel.IncreaseFuel(100);
@@ -201,29 +220,83 @@ public class GameManager : MonoBehaviour
                 }
                 break;
 
+            case GameState.Paused:
+                if (Input.GetKeyDown(KeyCode.Tab) && PauseToggle == true)
+                {
+                    PauseToggle = false;
+                    OnContinueGame();
+                }
+                else
+                {
+                    PauseToggle = true;
+                }
+                break;
+
             case GameState.GameOver:
-                m_HUD.gameObject.SetActive(false);
-                m_MainMenuPanel.gameObject.SetActive(false);
-                m_GameOverPanel.gameObject.SetActive(true);
+                m_HUD.SetActive(false);
+                m_MainMenuPanel.SetActive(false);
+                m_GameOverPanel.SetActive(true);
 
                 // Write the game over message
-                m_StageReachedText.text = "Stage Reached: " + ((int)m_GameStage + 1) + "/5";
+                m_StageReachedText.text = "Stages Completed: " + ((int)m_GameStage) + "/5";
                 break;
         }
 
         // Check if the player wants to quit
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            if (m_GameState == GameState.MenuScreen)
+            switch (m_GameState)
             {
-                m_GameState = GameState.StartScreen;
-                //m_BackButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                OnQuitGame();
+                case GameState.MenuScreen:
+                    m_GameState = GameState.StartScreen;
+                    break;
+
+                case GameState.Paused:
+                    if (PauseToggle == true)
+                    {
+                        PauseToggle = false;
+                        OnContinueGame();
+                    }
+                    else
+                    {
+                        PauseToggle = true;
+                    }
+                    break;
+
+                case GameState.Playing:
+                    if (PauseToggle == false)
+                    {
+                        PauseToggle = true;
+                        OnPauseGame();
+                    }
+                    else
+                    {
+                        PauseToggle = false;
+                    }
+                    
+                    break;
+
+                default:
+                    OnQuitGame();
+                    break;
             }
         }
+    }
+
+    // When the player pauses the game
+    public void OnPauseGame()
+    {
+        m_GameState = GameState.Paused;
+        m_PausePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+    
+    public void OnContinueGame()
+    {
+        PauseToggle = false;
+        m_GameState = GameState.Playing;
+        m_PausePanel.SetActive(false);
+        Time.timeScale = 1;
     }
 
     // Quit the game
@@ -235,13 +308,24 @@ public class GameManager : MonoBehaviour
     // Go to start screen when the Main Menu button is pressed
     public void OnMainMenuButton()
     {
+        m_PausePanel.SetActive(false);
+        Time.timeScale = 1;
         m_GameState = GameState.StartScreen;
     }
 
     // Open the credits
     public void OnCreditsButton()
     {
-        m_CreditsText.gameObject.SetActive(true);
+        m_GameState = GameState.MenuScreen;
+        m_MainMenuPanel.SetActive(false);
+        m_CreditsPanel.SetActive(true);
+    }
+
+    public void OnBackButton()
+    {
+        m_GameState = GameState.StartScreen;
+        m_CreditsPanel.SetActive(false);
+        m_MainMenuPanel.SetActive(true);
     }
 
     // Deletes all the enemies on screen when a new game is starting
@@ -268,7 +352,6 @@ public class GameManager : MonoBehaviour
             Destroy(i);
         }
     }
-
 
     // Create timers for when each stage will go by
     public void CheckStage()
@@ -374,7 +457,9 @@ public class GameManager : MonoBehaviour
                     if (m_EnemyManager.m_enemiesAlive == false)
                     {
                         m_GameOverText.text = "You Win";
+                        m_GameStage = GameStage.Win;
                         m_GameState = GameState.GameOver;
+                        ChangingStage = false;
                     }
                 }
                 break;

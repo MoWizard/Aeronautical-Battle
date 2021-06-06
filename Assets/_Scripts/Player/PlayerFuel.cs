@@ -5,11 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerFuel : MonoBehaviour
 {
-    // Reference Game Manager
-    public GameManager m_GameManager;
-
-    // Get the player
-    private GameObject player;
+    // Reference the Game Manager
+    private AudioManager m_AudioManager;
 
     // Get the particles
     public GameObject explosion;
@@ -22,9 +19,9 @@ public class PlayerFuel : MonoBehaviour
     private float m_Fuel = 102;
     public bool reduceFuel = false;
 
-    void Awake()
+    private void Awake()
     {
-        player = GameObject.Find("Player");
+        m_AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
     }
 
     void Start()
@@ -46,8 +43,9 @@ public class PlayerFuel : MonoBehaviour
             if (m_Fuel <= 0)
             {
                 // Explode the player once the fuel drops too low
-                Instantiate(explosion, player.transform.position, player.transform.rotation);
-                player.SetActive(false);
+                Instantiate(explosion, transform.position, transform.rotation);
+                m_AudioManager.ExplosionAudio.Play();
+                gameObject.SetActive(false);
             }
         }
         else
@@ -57,13 +55,13 @@ public class PlayerFuel : MonoBehaviour
         }
     }
 
+    // Decrease the fuel by x amount every y seconds
     public IEnumerator DecreaseFuel()
     {
         while (reduceFuel == true)
         {
             m_Fuel -= 4;
             m_FuelBar.fillAmount = m_Fuel / 100;
-            Debug.Log(m_Fuel);
             yield return new WaitForSeconds(1.25f);
         }
     }
