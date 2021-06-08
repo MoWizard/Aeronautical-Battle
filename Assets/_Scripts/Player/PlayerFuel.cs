@@ -60,7 +60,7 @@ public class PlayerFuel : MonoBehaviour
     {
         while (reduceFuel == true)
         {
-            m_Fuel -= 4;
+            m_Fuel -= 3;
             m_FuelBar.fillAmount = m_Fuel / 100;
             yield return new WaitForSeconds(1.25f);
         }

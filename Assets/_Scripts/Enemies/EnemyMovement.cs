@@ -8,6 +8,11 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         Bob();
+
+        if (transform.position.z < 65)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, 65);
+        }
     }
 
     // Bob the enemies up and down by a certain amount
