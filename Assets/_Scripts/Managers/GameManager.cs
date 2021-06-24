@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     // Toggle pause
     private bool PauseToggle = false;
 
+    // Llama
+    public bool LlamaTime = false;
 
     public float GameTime { get { return m_gameTime; } }
 
@@ -88,6 +90,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        m_player.transform.GetChild(1).gameObject.SetActive(false);
+
         m_EnemyManager = GetComponent<EnemyManager>();
 
         m_PlayerFuel = m_player.GetComponent<PlayerFuel>();
@@ -324,6 +328,24 @@ public class GameManager : MonoBehaviour
         m_GameState = GameState.MenuScreen;
         m_MainMenuPanel.SetActive(false);
         m_CreditsPanel.SetActive(true);
+    }
+
+    public void OnSecretButton()
+    {
+        if (LlamaTime == false)
+        {
+            m_player.transform.GetChild(0).gameObject.SetActive(false);
+            m_player.transform.GetChild(1).gameObject.SetActive(true);
+            LlamaTime = true;
+
+        }
+        else if (LlamaTime == true) 
+        {
+            m_player.transform.GetChild(0).gameObject.SetActive(true);
+            m_player.transform.GetChild(1).gameObject.SetActive(false);
+            LlamaTime = false;
+        }
+        Debug.Log("LLAMA");
     }
 
     public void OnBackButton()
