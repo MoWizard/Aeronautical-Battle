@@ -127,8 +127,8 @@ public class GameManager : MonoBehaviour
         {
             RemoveEnemies();
             m_GameStage = GameStage.Fifthstage;
-            m_nextStageTimer = 80f;
-            ChangingStage = false;
+            m_nextStageTimer = 0f;
+            ChangingStage = true;
             m_EnemyManager.m_FirstSuper = true;
         }
 
@@ -156,6 +156,11 @@ public class GameManager : MonoBehaviour
                 // Remove any enemies from view and brings the player back
                 RemoveEnemies();
                 m_player.SetActive(true);
+
+                // Resets the PlayerFuel script
+                m_PlayerFuel.reduceFuel = false;
+                StopCoroutine(m_PlayerFuel.DecreaseFuel());
+                m_PlayerFuel.IncreaseFuel(100);
                 break;
 
             case GameState.MenuScreen:
@@ -331,7 +336,7 @@ public class GameManager : MonoBehaviour
     // Deletes all the enemies on screen when a new game is starting
     public void RemoveEnemies()
     {
-        foreach(GameObject i in m_CasterArray)
+        foreach (GameObject i in m_CasterArray)
         {
             Destroy(i);
         }

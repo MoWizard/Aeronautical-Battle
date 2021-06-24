@@ -119,7 +119,7 @@ public class EnemyManager : MonoBehaviour
                 newEnemy.GetComponent<EnemyImmunity>().Immune = true;
 
                 // Move the enemy to the position of the spawnpoint
-                StartCoroutine(MoveEnemyForward(newEnemy, g));
+                StartCoroutine(MoveEnemyForward(newEnemy, newEnemy.transform.position.z));
 
                 // Change the script bool to true
                 g.GetComponent<EnemySpawnerCollisions>().isOccupied = true;
@@ -139,7 +139,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     // Move the enemy to the spawner
-    IEnumerator MoveEnemyForward(GameObject enemy, GameObject spawner)
+    public IEnumerator MoveEnemyForward(GameObject enemy, float enemyDistance)
     {
         // Check if this is the first Super enemy
         if (enemy.CompareTag("Super") && m_FirstSuper == false)
@@ -151,15 +151,37 @@ public class EnemyManager : MonoBehaviour
             m_FirstSuper = false;
         }
 
-        // While the enemy is not on the spawner, move it to the spawner
-        while (!(m_MoveVelocity.z >= -3f && enemy.transform.position.z <= 70)) 
+        // Check if they aren't in the game anymore
+        if (m_GameManager.State != GameManager.GameState.Playing)
         {
-            // Slowly move the enemy towards the spawn location
-            enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, spawner.transform.position, ref m_MoveVelocity, Time.deltaTime * 30f);
-
-            // Wait for each frame to move again - This will enable the movements to be smooth
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
+
+        while (enemy != null)
+        {
+            if (!(m_MoveVelocity.z >= -3f && enemy.transform.position.z <= 70))
+            {
+                // Slowly move the enemy towards the spawn location
+                enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, new Vector3(enemy.transform.position.x, enemy.transform.position.y, enemyDistance - 20f), ref m_MoveVelocity, Time.deltaTime * 30f);
+
+                // Wait for each frame to move again - This will enable the movements to be smooth
+                yield return new WaitForEndOfFrame();
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // While the enemy is not on the spawner, move it to the spawner
+        //while (!(m_MoveVelocity.z >= -3f && enemy.transform.position.z <= 70)) 
+        //{
+        //    // Slowly move the enemy towards the spawn location
+        //    enemy.transform.position = Vector3.SmoothDamp(enemy.transform.position, new Vector3(enemy.transform.position.x, enemy.transform.position.y, enemyDistance - 20f), ref m_MoveVelocity, Time.deltaTime * 30f);
+
+        //    // Wait for each frame to move again - This will enable the movements to be smooth
+        //    yield return new WaitForEndOfFrame();
+        //}
 
         // Allow the enemy to be hit again
         enemy.GetComponent<EnemyImmunity>().Immune = false;
